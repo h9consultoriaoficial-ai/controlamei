@@ -4,10 +4,13 @@ import type { CategoriaOption } from "./types";
 
 /**
  * Garante que o tenant tenha as categorias padrão e devolve a lista atual
- * (ordenada por nome). Se ainda não houver nenhuma, semeia as padrão.
+ * (ordenada por nome). Faz "top-up": insere apenas as padrão que ainda
+ * faltam (comparando por nome), sem duplicar as que já existem.
  *
- * Cobre dois casos:
- *  - tenants criados ANTES do módulo de despesas (auto-seed na 1ª visita);
+ * Cobre três casos:
+ *  - tenants criados ANTES do módulo de despesas (semeia todas na 1ª visita);
+ *  - tenants que já têm as padrão antigas e ganham as novas (ex.: fretes,
+ *    matéria-prima) automaticamente;
  *  - rede de segurança caso o seed do cadastro tenha falhado.
  *
  * Usa o client recebido (sessão do usuário, com RLS) — o insert só passa
@@ -23,25 +26,33 @@ export async function garantirCategoriasPadrao(
     .eq("tenant_id", tenantId)
     .order("nome");
 
-  if (existentes && existentes.length > 0) {
-    return existentes as CategoriaOption[];
-  }
+  const atuais = (existentes as CategoriaOption[]) || [];
+  const nomesExistentes = new Set(
+    atuais.map((c) => c.nome.trim().toLowerCase())
+  );
 
-  // Semeia as padrão.
-  const novas = CATEGORIAS_PADRAO.map((c) => ({
-    tenant_id: tenantId,
-    nome: c.nome,
-    icone: c.icone,
-    is_padrao: true,
-  }));
+  // Quais categorias padrão ainda faltam?
+  const faltantes = CATEGORIAS_PADRAO.filter(
+    (c) => !nomesExistentes.has(c.nome.trim().toLowerCase())
+  );
+
+  if (faltantes.length === 0) {
+    return atuais;
+  }
 
   const { data: inseridas } = await supabase
     .from("categorias_despesa")
-    .insert(novas)
+    .insert(
+      faltantes.map((c) => ({
+        tenant_id: tenantId,
+        nome: c.nome,
+        icone: c.icone,
+        is_padrao: true,
+      }))
+    )
     .select("id, nome, icone");
 
-  // Ordena por nome para exibição consistente.
-  return ((inseridas as CategoriaOption[]) || []).sort((a, b) =>
+  return [...atuais, ...((inseridas as CategoriaOption[]) || [])].sort((a, b) =>
     a.nome.localeCompare(b.nome, "pt-BR")
   );
 }

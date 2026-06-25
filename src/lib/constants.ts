@@ -56,8 +56,13 @@ export const CATEGORIAS_PADRAO: { nome: string; icone: string }[] = [
   { nome: "Contador/assessoria", icone: "📊" },
   // Variáveis
   { nome: "Compra de estoque", icone: "📦" },
+  { nome: "Matéria-prima", icone: "🧱" },
   { nome: "Embalagens", icone: "🎁" },
   { nome: "Transporte/combustível", icone: "⛽" },
+  { nome: "Frete (envio de produtos)", icone: "🚚" },
+  { nome: "Despesas com caminhão", icone: "🚛" },
+  { nome: "Passagens intermunicipal", icone: "🚌" },
+  { nome: "Pagamento de fretes para terceiros", icone: "💸" },
   { nome: "Marketing", icone: "📣" },
   { nome: "Equipamentos", icone: "🖥️" },
   { nome: "Manutenção", icone: "🔧" },
