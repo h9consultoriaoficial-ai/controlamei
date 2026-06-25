@@ -1,4 +1,6 @@
-# Controla MEI
+# MEI no Limite
+
+> Seu faturamento sempre no limite certo.
 
 SaaS multi-tenant para o microempreendedor individual (MEI) controlar o
 faturamento anual, acompanhar o limite de **R$ 81.000** num semáforo visual e

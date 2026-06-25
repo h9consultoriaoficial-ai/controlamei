@@ -1,4 +1,4 @@
-# TODO antes de comercializar — Controla MEI
+# TODO antes de comercializar — MEI no Limite
 
 Checklist do que precisa ser feito/desfeito antes de abrir o cadastro pro
 público pagante. Baseado na skill `saas-multitenant-seguro`.

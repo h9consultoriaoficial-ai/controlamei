@@ -19,7 +19,7 @@ export default function LoginPage() {
       </Link>
 
       <h1 className="text-2xl font-extrabold text-gray-900">Entrar</h1>
-      <p className="mt-1 text-gray-600">Acesse sua conta do Controla MEI.</p>
+      <p className="mt-1 text-gray-600">Acesse sua conta do MEI no Limite.</p>
 
       {state.error && (
         <div className="mt-5 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-700">

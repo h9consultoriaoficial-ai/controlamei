@@ -1,5 +1,5 @@
 -- =====================================================================
--- Controla MEI — Schema do banco (Supabase / Postgres)
+-- MEI no Limite — Schema do banco (Supabase / Postgres)
 -- =====================================================================
 -- Projeto GREENFIELD: RLS é ativado desde o início. Como NÃO existem
 -- dados antigos, não há necessidade de backfill (ver skill

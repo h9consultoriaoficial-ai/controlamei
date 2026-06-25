@@ -12,7 +12,7 @@ import type { Relatorio, Tenant } from "@/lib/types";
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Relatório de Faturamento — Controla MEI",
+  title: "Relatório de Faturamento — MEI no Limite",
   robots: { index: false, follow: false },
 };
 
@@ -137,7 +137,7 @@ export default async function RelatorioPublicoPage({
 
         {/* Rodapé */}
         <div className="rounded-b-2xl border-t border-gray-100 bg-white px-6 py-5 text-center text-sm text-gray-400">
-          Gerado pelo Controla MEI — controlamei.com.br
+          Gerado pelo MEI no Limite — controlamei.com.br
         </div>
       </div>
     </main>

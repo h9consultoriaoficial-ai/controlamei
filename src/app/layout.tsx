@@ -9,7 +9,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Controla MEI — Controle seu faturamento sem complicação",
+  title: "MEI no Limite — Seu faturamento sempre no limite certo",
   description:
     "Lance suas vendas, acompanhe o limite anual do MEI e envie o relatório pro seu contador pelo WhatsApp.",
 };

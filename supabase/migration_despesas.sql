@@ -1,5 +1,5 @@
 -- =====================================================================
--- Controla MEI — Migração: módulo de despesas com categorias
+-- MEI no Limite — Migração: módulo de despesas com categorias
 -- Rodar no Supabase SQL Editor (banco que JÁ tem o schema inicial).
 -- Seguro e idempotente.
 -- =====================================================================

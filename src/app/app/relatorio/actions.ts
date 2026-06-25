@@ -77,7 +77,7 @@ export async function gerarRelatorio(): Promise<GerarRelatorioResult> {
     `Limite anual: ${formatBRL(LIMITE_MEI)}\n` +
     `Usado do limite: ${formatPct(resumo.pctUsado)}\n\n` +
     `Relatório completo: ${publicUrl}\n\n` +
-    `Enviado pelo Controla MEI`;
+    `Enviado pelo MEI no Limite`;
 
   const numero = onlyDigits(tenant.whatsapp_contador);
   if (!numero) {

@@ -24,8 +24,8 @@ export default function LandingPage() {
         </span>
 
         <h1 className="max-w-3xl text-4xl font-extrabold leading-tight tracking-tight text-gray-900 sm:text-5xl">
-          Controle o faturamento do seu MEI{" "}
-          <span className="text-primary">sem complicação</span>
+          Seu faturamento sempre{" "}
+          <span className="text-primary">no limite certo</span>
         </h1>
 
         <p className="mt-5 max-w-xl text-lg text-gray-600">
@@ -64,7 +64,7 @@ export default function LandingPage() {
       </section>
 
       <footer className="mx-auto w-full max-w-5xl px-5 py-8 text-center text-sm text-gray-400">
-        Controla MEI — controlamei.com.br
+        MEI no Limite — controlamei.com.br
       </footer>
     </main>
   );

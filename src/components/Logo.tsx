@@ -1,7 +1,7 @@
 interface LogoProps {
   /** Tamanho do quadro "H9". */
   size?: "sm" | "md" | "lg";
-  /** Mostrar o texto "Controla MEI" ao lado. */
+  /** Mostrar o texto "MEI no Limite" ao lado. */
   withText?: boolean;
   /** Variante de cor do texto (para fundos escuros). */
   light?: boolean;
@@ -32,7 +32,7 @@ export default function Logo({
             light ? "text-white" : "text-primary"
           }`}
         >
-          Controla MEI
+          MEI no Limite
         </span>
       )}
     </div>
