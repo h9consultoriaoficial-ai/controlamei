@@ -3,10 +3,10 @@ import Semaforo from "@/components/Semaforo";
 import PainelLancamento from "@/components/PainelLancamento";
 import { getTenantOrRedirect } from "@/lib/tenant";
 import { createClient } from "@/lib/supabase/server";
-import { calcularResumo } from "@/lib/mei";
+import { carregarAno } from "@/lib/dados";
+import { garantirCategoriasPadrao } from "@/lib/categorias";
 import { formatBRL } from "@/lib/format";
 import { LIMITE_MEI } from "@/lib/constants";
-import type { Lancamento } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
 
@@ -18,13 +18,10 @@ export default async function AppHomePage() {
   const ano = agora.getFullYear();
   const mesAtual = agora.getMonth() + 1;
 
-  const { data: lancamentos } = await supabase
-    .from("lancamentos")
-    .select("mes, valor")
-    .eq("tenant_id", tenant.id)
-    .eq("ano", ano);
-
-  const resumo = calcularResumo((lancamentos as Lancamento[]) || []);
+  const [{ resumo }, categorias] = await Promise.all([
+    carregarAno(supabase, tenant.id, ano),
+    garantirCategoriasPadrao(supabase, tenant.id),
+  ]);
 
   const primeiroNome = tenant.nome.split(" ")[0];
 
@@ -39,7 +36,7 @@ export default async function AppHomePage() {
 
       <Semaforo status={resumo.status} pctUsado={resumo.pctUsado} />
 
-      {/* Alertas */}
+      {/* Alertas (regra MEI = só receitas) */}
       {resumo.status === "amarelo" && (
         <div className="rounded-2xl border border-amber-200 bg-amber-50 px-5 py-4">
           <p className="font-bold text-amber-800">⚠️ Você já passou de 80%!</p>
@@ -68,12 +65,12 @@ export default async function AppHomePage() {
         </div>
       )}
 
-      {/* Resumo total vs disponível */}
+      {/* Resumo: faturamento (receitas) vs disponível */}
       <div className="grid grid-cols-2 gap-3">
         <div className="card">
           <p className="text-sm text-gray-500">Total faturado</p>
           <p className="mt-1 text-xl font-extrabold text-gray-900">
-            {formatBRL(resumo.total)}
+            {formatBRL(resumo.totalReceitas)}
           </p>
         </div>
         <div className="card">
@@ -84,10 +81,33 @@ export default async function AppHomePage() {
         </div>
       </div>
 
+      {/* Despesas do ano (informativo, não conta no limite) */}
+      <div className="card flex items-center justify-between">
+        <div>
+          <p className="text-sm text-gray-500">Despesas do ano</p>
+          <p className="mt-1 text-xl font-extrabold text-semaforo-vermelho">
+            {formatBRL(resumo.totalDespesas)}
+          </p>
+        </div>
+        <div className="text-right">
+          <p className="text-sm text-gray-500">Saldo líquido</p>
+          <p
+            className={`mt-1 text-xl font-extrabold ${
+              resumo.saldoLiquido >= 0
+                ? "text-semaforo-verde"
+                : "text-semaforo-vermelho"
+            }`}
+          >
+            {formatBRL(resumo.saldoLiquido)}
+          </p>
+        </div>
+      </div>
+
       <PainelLancamento
         ano={ano}
-        valoresPorMes={resumo.valoresPorMes}
+        receitasPorMes={resumo.receitasPorMes}
         mesAtual={mesAtual}
+        categorias={categorias}
       />
     </div>
   );

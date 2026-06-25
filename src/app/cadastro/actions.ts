@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { onlyDigits } from "@/lib/format";
+import { CATEGORIAS_PADRAO } from "@/lib/constants";
 import type { TipoAtividade } from "@/lib/types";
 
 export interface CadastroState {
@@ -60,24 +61,39 @@ export async function cadastrar(
   const userId = created.user.id;
 
   // 2) Cria o tenant (MEI) vinculado ao user_id recém-criado (via service role).
-  const { error: tenantErr } = await admin.from("tenants").insert({
-    nome,
-    cpf,
-    whatsapp,
-    nome_contador,
-    whatsapp_contador,
-    tipo_atividade,
-    user_id: userId,
-  });
+  const { data: tenant, error: tenantErr } = await admin
+    .from("tenants")
+    .insert({
+      nome,
+      cpf,
+      whatsapp,
+      nome_contador,
+      whatsapp_contador,
+      tipo_atividade,
+      user_id: userId,
+    })
+    .select("id")
+    .single();
 
-  if (tenantErr) {
+  if (tenantErr || !tenant) {
     // Rollback: remove o usuário órfão para permitir nova tentativa.
     await admin.auth.admin.deleteUser(userId);
-    if (tenantErr.code === "23505") {
+    if (tenantErr?.code === "23505") {
       return { error: "Este CPF já está cadastrado." };
     }
     return { error: "Erro ao salvar seus dados. Tente novamente." };
   }
+
+  // 2b) Semeia as categorias de despesa padrão DESTE tenant (is_padrao = true).
+  //     Falha aqui não é fatal — o app recria na primeira visita à aba Despesa.
+  await admin.from("categorias_despesa").insert(
+    CATEGORIAS_PADRAO.map((c) => ({
+      tenant_id: tenant.id,
+      nome: c.nome,
+      icone: c.icone,
+      is_padrao: true,
+    }))
+  );
 
   // 3) Cria a sessão (grava cookies) para já entrar logado.
   const supabase = createClient();

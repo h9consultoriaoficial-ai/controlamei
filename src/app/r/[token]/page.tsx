@@ -2,11 +2,12 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import Logo from "@/components/Logo";
 import TabelaMensal from "@/components/TabelaMensal";
+import RankingCategorias from "@/components/RankingCategorias";
 import { createAdminClient } from "@/lib/supabase/admin";
-import { calcularResumo } from "@/lib/mei";
+import { carregarAno } from "@/lib/dados";
 import { formatBRL, formatPct, formatCPF } from "@/lib/format";
 import { LIMITE_MEI, TIPOS_ATIVIDADE } from "@/lib/constants";
-import type { Lancamento, Relatorio, Tenant } from "@/lib/types";
+import type { Relatorio, Tenant } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
 
@@ -37,19 +38,11 @@ async function carregar(token: string) {
 
   if (!tenant) return null;
 
-  // 3) Lançamentos do ano do relatório.
+  // 3) Resumo + ranking do ano do relatório.
   const ano = rel.ano ?? new Date().getFullYear();
-  const { data: lancamentos } = await admin
-    .from("lancamentos")
-    .select("mes, valor")
-    .eq("tenant_id", rel.tenant_id)
-    .eq("ano", ano);
+  const { resumo, ranking } = await carregarAno(admin, rel.tenant_id, ano);
 
-  return {
-    tenant: tenant as Tenant,
-    ano,
-    resumo: calcularResumo((lancamentos as Lancamento[]) || []),
-  };
+  return { tenant: tenant as Tenant, ano, resumo, ranking };
 }
 
 export default async function RelatorioPublicoPage({
@@ -60,7 +53,7 @@ export default async function RelatorioPublicoPage({
   const dados = await carregar(params.token);
   if (!dados) notFound();
 
-  const { tenant, ano, resumo } = dados;
+  const { tenant, ano, resumo, ranking } = dados;
   const tipoLabel =
     TIPOS_ATIVIDADE.find((t) => t.value === tenant.tipo_atividade)?.label ||
     "—";
@@ -86,9 +79,7 @@ export default async function RelatorioPublicoPage({
             <Item rotulo="Nome" valor={tenant.nome} />
             <Item rotulo="CPF" valor={formatCPF(tenant.cpf)} />
             <Item rotulo="Atividade" valor={tipoLabel} />
-            {tenant.whatsapp && (
-              <Item rotulo="Contato" valor={tenant.whatsapp} />
-            )}
+            {tenant.whatsapp && <Item rotulo="Contato" valor={tenant.whatsapp} />}
           </dl>
         </div>
 
@@ -98,27 +89,50 @@ export default async function RelatorioPublicoPage({
             Resumo do ano
           </h2>
           <div className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-4">
-            <Resumo titulo="Total faturado" valor={formatBRL(resumo.total)} />
-            <Resumo titulo="Limite anual" valor={formatBRL(LIMITE_MEI)} />
-            <Resumo titulo="Disponível" valor={formatBRL(resumo.disponivel)} />
             <Resumo
-              titulo="% usado"
-              valor={formatPct(resumo.pctUsado)}
-              status={resumo.status}
+              titulo="Receitas"
+              valor={formatBRL(resumo.totalReceitas)}
+              cor="text-semaforo-verde"
             />
+            <Resumo
+              titulo="Despesas"
+              valor={formatBRL(resumo.totalDespesas)}
+              cor="text-semaforo-vermelho"
+            />
+            <Resumo
+              titulo="Saldo líquido"
+              valor={formatBRL(resumo.saldoLiquido)}
+              cor={
+                resumo.saldoLiquido >= 0
+                  ? "text-semaforo-verde"
+                  : "text-semaforo-vermelho"
+              }
+            />
+            <Resumo titulo="% do limite" valor={formatPct(resumo.pctUsado)} />
           </div>
+          <p className="mt-3 text-xs text-gray-400">
+            Limite anual do MEI: {formatBRL(LIMITE_MEI)} (apenas receitas
+            contam para o limite).
+          </p>
         </div>
 
         {/* Tabela mês a mês */}
         <div className="border-t border-gray-100 bg-white px-6 py-5">
           <h2 className="mb-3 text-sm font-bold uppercase tracking-wide text-gray-400">
-            Faturamento mês a mês
+            Receitas, despesas e saldo por mês
           </h2>
           <TabelaMensal
-            valoresPorMes={resumo.valoresPorMes}
-            total={resumo.total}
-            pctUsado={resumo.pctUsado}
+            receitasPorMes={resumo.receitasPorMes}
+            despesasPorMes={resumo.despesasPorMes}
           />
+        </div>
+
+        {/* Ranking de categorias */}
+        <div className="border-t border-gray-100 bg-white px-6 py-5">
+          <h2 className="mb-4 text-sm font-bold uppercase tracking-wide text-gray-400">
+            Despesas por categoria
+          </h2>
+          <RankingCategorias ranking={ranking} />
         </div>
 
         {/* Rodapé */}
@@ -142,24 +156,18 @@ function Item({ rotulo, valor }: { rotulo: string; valor: string }) {
 function Resumo({
   titulo,
   valor,
-  status,
+  cor,
 }: {
   titulo: string;
   valor: string;
-  status?: "verde" | "amarelo" | "vermelho";
+  cor?: string;
 }) {
-  const cor =
-    status === "vermelho"
-      ? "text-semaforo-vermelho"
-      : status === "amarelo"
-      ? "text-semaforo-amarelo"
-      : status === "verde"
-      ? "text-semaforo-verde"
-      : "text-gray-900";
   return (
     <div className="rounded-xl bg-gray-50 px-3 py-3">
       <p className="text-xs text-gray-400">{titulo}</p>
-      <p className={`mt-0.5 text-base font-extrabold ${cor}`}>{valor}</p>
+      <p className={`mt-0.5 text-base font-extrabold ${cor || "text-gray-900"}`}>
+        {valor}
+      </p>
     </div>
   );
 }

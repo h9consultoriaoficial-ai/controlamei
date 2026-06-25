@@ -6,28 +6,40 @@ import {
   LinearScale,
   BarElement,
   Tooltip,
+  Legend,
   type ChartOptions,
 } from "chart.js";
 import { Bar } from "react-chartjs-2";
 import { MESES_CURTOS } from "@/lib/constants";
 import { formatBRL } from "@/lib/format";
 
-ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip);
+ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend);
 
 export default function HistoricoChart({
-  valoresPorMes,
+  receitasPorMes,
+  despesasPorMes,
 }: {
-  valoresPorMes: number[];
+  receitasPorMes: number[];
+  despesasPorMes: number[];
 }) {
   const data = {
     labels: [...MESES_CURTOS],
     datasets: [
       {
-        data: valoresPorMes,
-        backgroundColor: "#0F6E56",
-        hoverBackgroundColor: "#0B5644",
-        borderRadius: 6,
-        maxBarThickness: 36,
+        label: "Receitas",
+        data: receitasPorMes,
+        backgroundColor: "#16A34A",
+        hoverBackgroundColor: "#15803D",
+        borderRadius: 5,
+        maxBarThickness: 22,
+      },
+      {
+        label: "Despesas",
+        data: despesasPorMes,
+        backgroundColor: "#DC2626",
+        hoverBackgroundColor: "#B91C1C",
+        borderRadius: 5,
+        maxBarThickness: 22,
       },
     ],
   };
@@ -36,10 +48,15 @@ export default function HistoricoChart({
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
-      legend: { display: false },
+      legend: {
+        display: true,
+        position: "top",
+        labels: { boxWidth: 12, font: { size: 12 } },
+      },
       tooltip: {
         callbacks: {
-          label: (ctx) => formatBRL(Number(ctx.raw) || 0),
+          label: (ctx) =>
+            `${ctx.dataset.label}: ${formatBRL(Number(ctx.raw) || 0)}`,
         },
       },
     },
@@ -63,7 +80,7 @@ export default function HistoricoChart({
   };
 
   return (
-    <div className="h-64">
+    <div className="h-72">
       <Bar data={data} options={options} />
     </div>
   );

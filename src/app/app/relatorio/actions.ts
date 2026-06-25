@@ -48,11 +48,13 @@ export async function gerarRelatorio(): Promise<GerarRelatorioResult> {
 
   const { data: lancamentos } = await supabase
     .from("lancamentos")
-    .select("mes, valor")
+    .select("mes, valor, tipo")
     .eq("tenant_id", tenant.id)
     .eq("ano", ano);
 
-  const resumo = calcularResumo((lancamentos as Lancamento[]) || []);
+  const resumo = calcularResumo(
+    (lancamentos as Pick<Lancamento, "mes" | "valor" | "tipo">[]) || []
+  );
 
   // Token público (crypto.randomUUID) salvo em relatorios.
   const token = crypto.randomUUID();
@@ -69,9 +71,11 @@ export async function gerarRelatorio(): Promise<GerarRelatorioResult> {
   const mensagem =
     `Olá${tenant.nome_contador ? " " + tenant.nome_contador : ""}! ` +
     `Segue o relatório de faturamento do MEI ${tenant.nome} (${ano}).\n\n` +
-    `Total faturado: ${formatBRL(resumo.total)}\n` +
+    `Receitas: ${formatBRL(resumo.totalReceitas)}\n` +
+    `Despesas: ${formatBRL(resumo.totalDespesas)}\n` +
+    `Saldo líquido: ${formatBRL(resumo.saldoLiquido)}\n` +
     `Limite anual: ${formatBRL(LIMITE_MEI)}\n` +
-    `Usado: ${formatPct(resumo.pctUsado)}\n\n` +
+    `Usado do limite: ${formatPct(resumo.pctUsado)}\n\n` +
     `Relatório completo: ${publicUrl}\n\n` +
     `Enviado pelo Controla MEI`;
 

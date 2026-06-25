@@ -40,3 +40,29 @@ export const TIPOS_ATIVIDADE = [
   { value: "servico", label: "Serviço" },
   { value: "misto", label: "Misto (comércio + serviço)" },
 ] as const;
+
+/**
+ * Categorias de despesa padrão, criadas por tenant no cadastro.
+ * NÃO são globais — cada MEI recebe a sua cópia (isolamento multi-tenant).
+ */
+export const CATEGORIAS_PADRAO: { nome: string; icone: string }[] = [
+  // Fixas
+  { nome: "Aluguel", icone: "🏠" },
+  { nome: "Conta de luz", icone: "💡" },
+  { nome: "Conta de água", icone: "🚰" },
+  { nome: "Internet", icone: "🌐" },
+  { nome: "Telefone/celular", icone: "📱" },
+  { nome: "DAS", icone: "🧾" },
+  { nome: "Contador/assessoria", icone: "📊" },
+  // Variáveis
+  { nome: "Compra de estoque", icone: "📦" },
+  { nome: "Embalagens", icone: "🎁" },
+  { nome: "Transporte/combustível", icone: "⛽" },
+  { nome: "Marketing", icone: "📣" },
+  { nome: "Equipamentos", icone: "🖥️" },
+  { nome: "Manutenção", icone: "🔧" },
+  // Outras
+  { nome: "Alimentação", icone: "🍽️" },
+  { nome: "Cursos e capacitação", icone: "🎓" },
+  { nome: "Outros", icone: "➕" },
+];

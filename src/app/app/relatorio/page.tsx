@@ -1,11 +1,11 @@
 import EnviarContador from "@/components/EnviarContador";
 import TabelaMensal from "@/components/TabelaMensal";
+import RankingCategorias from "@/components/RankingCategorias";
 import { getTenantOrRedirect } from "@/lib/tenant";
 import { createClient } from "@/lib/supabase/server";
-import { calcularResumo } from "@/lib/mei";
+import { carregarAno } from "@/lib/dados";
 import { formatBRL, formatPct } from "@/lib/format";
 import { LIMITE_MEI } from "@/lib/constants";
-import type { Lancamento } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
 
@@ -14,14 +14,7 @@ export default async function RelatorioPage() {
   const supabase = createClient();
 
   const ano = new Date().getFullYear();
-
-  const { data: lancamentos } = await supabase
-    .from("lancamentos")
-    .select("mes, valor")
-    .eq("tenant_id", tenant.id)
-    .eq("ano", ano);
-
-  const resumo = calcularResumo((lancamentos as Lancamento[]) || []);
+  const { resumo, ranking } = await carregarAno(supabase, tenant.id, ano);
 
   return (
     <div className="flex flex-col gap-5">
@@ -34,24 +27,51 @@ export default async function RelatorioPage() {
 
       {/* Cards de resumo */}
       <div className="grid grid-cols-2 gap-3">
-        <Card titulo="Faturamento total" valor={formatBRL(resumo.total)} destaque />
-        <Card titulo="Limite anual" valor={formatBRL(LIMITE_MEI)} />
-        <Card titulo="Disponível" valor={formatBRL(resumo.disponivel)} />
-        <Card titulo="% do limite usado" valor={formatPct(resumo.pctUsado)} />
+        <Card
+          titulo="Receitas"
+          valor={formatBRL(resumo.totalReceitas)}
+          cor="text-semaforo-verde"
+        />
+        <Card
+          titulo="Despesas"
+          valor={formatBRL(resumo.totalDespesas)}
+          cor="text-semaforo-vermelho"
+        />
+        <Card
+          titulo="Saldo líquido"
+          valor={formatBRL(resumo.saldoLiquido)}
+          cor={
+            resumo.saldoLiquido >= 0
+              ? "text-semaforo-verde"
+              : "text-semaforo-vermelho"
+          }
+        />
+        <Card titulo="% do limite" valor={formatPct(resumo.pctUsado)} />
       </div>
 
-      {/* Tabela detalhada mês a mês */}
+      <p className="-mt-1 text-center text-xs text-gray-400">
+        Limite anual do MEI: {formatBRL(LIMITE_MEI)} (considera só receitas).
+      </p>
+
+      {/* Tabela mês a mês */}
       <div className="card overflow-hidden p-0">
         <h2 className="border-b border-gray-100 px-5 py-4 text-lg font-bold text-gray-900">
           Detalhe por mês — {ano}
         </h2>
         <div className="px-5 pb-3 pt-1">
           <TabelaMensal
-            valoresPorMes={resumo.valoresPorMes}
-            total={resumo.total}
-            pctUsado={resumo.pctUsado}
+            receitasPorMes={resumo.receitasPorMes}
+            despesasPorMes={resumo.despesasPorMes}
           />
         </div>
+      </div>
+
+      {/* Ranking de categorias */}
+      <div className="card">
+        <h2 className="mb-4 text-lg font-bold text-gray-900">
+          Despesas por categoria
+        </h2>
+        <RankingCategorias ranking={ranking} />
       </div>
 
       {/* Dados do contador */}
@@ -78,20 +98,16 @@ export default async function RelatorioPage() {
 function Card({
   titulo,
   valor,
-  destaque,
+  cor,
 }: {
   titulo: string;
   valor: string;
-  destaque?: boolean;
+  cor?: string;
 }) {
   return (
     <div className="card">
       <p className="text-sm text-gray-500">{titulo}</p>
-      <p
-        className={`mt-1 text-xl font-extrabold ${
-          destaque ? "text-primary" : "text-gray-900"
-        }`}
-      >
+      <p className={`mt-1 text-xl font-extrabold ${cor || "text-gray-900"}`}>
         {valor}
       </p>
     </div>

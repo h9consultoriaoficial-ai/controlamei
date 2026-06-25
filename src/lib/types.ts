@@ -1,4 +1,5 @@
 export type TipoAtividade = "comercio" | "servico" | "misto";
+export type TipoLancamento = "receita" | "despesa";
 
 export interface Tenant {
   id: string;
@@ -13,12 +14,30 @@ export interface Tenant {
   created_at: string;
 }
 
+export interface CategoriaDespesa {
+  id: string;
+  tenant_id: string;
+  nome: string;
+  icone: string | null;
+  is_padrao: boolean;
+  created_at: string;
+}
+
+/** Versão enxuta usada no front (select de categoria). */
+export interface CategoriaOption {
+  id: string;
+  nome: string;
+  icone: string | null;
+}
+
 export interface Lancamento {
   id: string;
   tenant_id: string;
   mes: number;
   ano: number;
   valor: number;
+  tipo: TipoLancamento;
+  categoria_id: string | null;
   created_at: string;
 }
 
