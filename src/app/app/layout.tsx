@@ -10,7 +10,7 @@ export default function AppLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="min-h-screen pb-24 sm:pb-8">
+    <div className="min-h-screen pb-24">
       <header className="border-b border-gray-100 bg-white">
         <div className="mx-auto flex w-full max-w-3xl items-center justify-between px-5 py-4">
           <Link href="/app">
