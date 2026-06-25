@@ -1,0 +1,12 @@
+# Normaliza fins de linha: evita ruído CRLF/LF entre Windows e a Vercel (Linux).
+* text=auto eol=lf
+
+# Binários (não normalizar)
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.webp binary
+*.ico binary
+*.woff binary
+*.woff2 binary
