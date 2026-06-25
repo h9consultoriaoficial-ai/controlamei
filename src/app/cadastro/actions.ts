@@ -29,6 +29,9 @@ export async function cadastrar(
   const tipo_atividade = String(
     formData.get("tipo_atividade") || ""
   ) as TipoAtividade;
+  const tipoMeiRaw = String(formData.get("tipo_mei") || "mei");
+  const tipo_mei =
+    tipoMeiRaw === "mei_caminhoneiro" ? "mei_caminhoneiro" : "mei";
 
   // Validações simples (público com pouca instrução -> mensagens claras)
   if (!nome) return { error: "Digite seu nome." };
@@ -70,6 +73,7 @@ export async function cadastrar(
       nome_contador,
       whatsapp_contador,
       tipo_atividade,
+      tipo_mei,
       user_id: userId,
     })
     .select("id")

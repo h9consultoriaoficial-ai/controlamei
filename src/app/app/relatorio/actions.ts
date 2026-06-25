@@ -4,7 +4,7 @@ import { headers } from "next/headers";
 import { createClient } from "@/lib/supabase/server";
 import { calcularResumo } from "@/lib/mei";
 import { formatBRL, formatPct, onlyDigits } from "@/lib/format";
-import { LIMITE_MEI } from "@/lib/constants";
+import { getLimite, labelTipoMei } from "@/lib/constants";
 import type { Lancamento } from "@/lib/types";
 
 export interface GerarRelatorioResult {
@@ -52,8 +52,10 @@ export async function gerarRelatorio(): Promise<GerarRelatorioResult> {
     .eq("tenant_id", tenant.id)
     .eq("ano", ano);
 
+  const limite = getLimite(tenant.tipo_mei);
   const resumo = calcularResumo(
-    (lancamentos as Pick<Lancamento, "mes" | "valor" | "tipo">[]) || []
+    (lancamentos as Pick<Lancamento, "mes" | "valor" | "tipo">[]) || [],
+    limite
   );
 
   // Token público (crypto.randomUUID) salvo em relatorios.
@@ -71,10 +73,11 @@ export async function gerarRelatorio(): Promise<GerarRelatorioResult> {
   const mensagem =
     `Olá${tenant.nome_contador ? " " + tenant.nome_contador : ""}! ` +
     `Segue o relatório de faturamento do MEI ${tenant.nome} (${ano}).\n\n` +
+    `Tipo: ${labelTipoMei(tenant.tipo_mei)}\n` +
     `Receitas: ${formatBRL(resumo.totalReceitas)}\n` +
     `Despesas: ${formatBRL(resumo.totalDespesas)}\n` +
     `Saldo líquido: ${formatBRL(resumo.saldoLiquido)}\n` +
-    `Limite anual: ${formatBRL(LIMITE_MEI)}\n` +
+    `Limite anual: ${formatBRL(limite)}\n` +
     `Usado do limite: ${formatPct(resumo.pctUsado)}\n\n` +
     `Relatório completo: ${publicUrl}\n\n` +
     `Enviado pelo MEI no Limite`;

@@ -1,4 +1,4 @@
-import { ALERTA_AMARELO, ALERTA_VERMELHO, LIMITE_MEI } from "./constants";
+import { ALERTA_AMARELO, ALERTA_CRITICO, ALERTA_VERMELHO } from "./constants";
 
 export type StatusSemaforo = "verde" | "amarelo" | "vermelho";
 
@@ -10,12 +10,14 @@ export function getStatus(pctUsado: number): StatusSemaforo {
 }
 
 export interface ResumoAnual {
+  limite: number; // limite anual conforme o tipo de MEI
   totalReceitas: number;
   totalDespesas: number;
   saldoLiquido: number; // receitas - despesas (informativo)
   disponivel: number; // limite - receitas
   pctUsado: number; // receitas / limite (regra MEI)
   status: StatusSemaforo;
+  critico: boolean; // receitas acima de 120% do limite (alerta especial)
   mediaMensal: number; // média das receitas nos meses com receita
   melhorMes: { mes: number; valor: number } | null; // por receita
   receitasPorMes: number[]; // índice 0..11 (Jan..Dez)
@@ -30,10 +32,16 @@ export interface LancamentoCalc {
 
 /**
  * Calcula o resumo anual separando receitas e despesas.
- * IMPORTANTE: o limite do MEI (R$ 81.000) considera APENAS receitas.
- * As despesas são gerenciais/informativas.
+ * IMPORTANTE: o limite considera APENAS receitas e depende do tipo de MEI
+ * (R$ 81.000 padrão / R$ 251.600 caminhoneiro). As despesas são
+ * gerenciais/informativas.
+ *
+ * @param limite limite anual do tipo de MEI (use getLimite(tenant.tipo_mei)).
  */
-export function calcularResumo(lancamentos: LancamentoCalc[]): ResumoAnual {
+export function calcularResumo(
+  lancamentos: LancamentoCalc[],
+  limite: number
+): ResumoAnual {
   const receitasPorMes = new Array(12).fill(0);
   const despesasPorMes = new Array(12).fill(0);
 
@@ -48,9 +56,10 @@ export function calcularResumo(lancamentos: LancamentoCalc[]): ResumoAnual {
   const totalReceitas = receitasPorMes.reduce((a, b) => a + b, 0);
   const totalDespesas = despesasPorMes.reduce((a, b) => a + b, 0);
   const saldoLiquido = totalReceitas - totalDespesas;
-  const disponivel = Math.max(LIMITE_MEI - totalReceitas, 0);
-  const pctUsado = (totalReceitas / LIMITE_MEI) * 100;
+  const disponivel = Math.max(limite - totalReceitas, 0);
+  const pctUsado = limite > 0 ? (totalReceitas / limite) * 100 : 0;
   const status = getStatus(pctUsado);
+  const critico = pctUsado > ALERTA_CRITICO;
 
   const mesesComReceita = receitasPorMes.filter((v) => v > 0).length;
   const mediaMensal = mesesComReceita > 0 ? totalReceitas / mesesComReceita : 0;
@@ -63,12 +72,14 @@ export function calcularResumo(lancamentos: LancamentoCalc[]): ResumoAnual {
   });
 
   return {
+    limite,
     totalReceitas,
     totalDespesas,
     saldoLiquido,
     disponivel,
     pctUsado,
     status,
+    critico,
     mediaMensal,
     melhorMes,
     receitasPorMes,

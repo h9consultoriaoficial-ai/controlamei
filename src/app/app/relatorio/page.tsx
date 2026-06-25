@@ -5,7 +5,7 @@ import { getTenantOrRedirect } from "@/lib/tenant";
 import { createClient } from "@/lib/supabase/server";
 import { carregarAno } from "@/lib/dados";
 import { formatBRL, formatPct } from "@/lib/format";
-import { LIMITE_MEI } from "@/lib/constants";
+import { getLimite, labelTipoMei } from "@/lib/constants";
 
 export const dynamic = "force-dynamic";
 
@@ -14,7 +14,12 @@ export default async function RelatorioPage() {
   const supabase = createClient();
 
   const ano = new Date().getFullYear();
-  const { resumo, ranking } = await carregarAno(supabase, tenant.id, ano);
+  const { resumo, ranking } = await carregarAno(
+    supabase,
+    tenant.id,
+    ano,
+    getLimite(tenant.tipo_mei)
+  );
 
   return (
     <div className="flex flex-col gap-5">
@@ -50,7 +55,8 @@ export default async function RelatorioPage() {
       </div>
 
       <p className="-mt-1 text-center text-xs text-gray-400">
-        Limite anual do MEI: {formatBRL(LIMITE_MEI)} (considera só receitas).
+        {labelTipoMei(tenant.tipo_mei)} — limite anual {formatBRL(resumo.limite)}{" "}
+        (considera só receitas).
       </p>
 
       {/* Tabela mês a mês */}

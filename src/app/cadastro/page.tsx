@@ -4,8 +4,8 @@ import Link from "next/link";
 import { useFormState, useFormStatus } from "react-dom";
 import { useState } from "react";
 import Logo from "@/components/Logo";
-import { TIPOS_ATIVIDADE } from "@/lib/constants";
-import { maskPhone } from "@/lib/format";
+import { TIPOS_ATIVIDADE, TIPOS_MEI } from "@/lib/constants";
+import { formatBRL, maskPhone } from "@/lib/format";
 import { cadastrar, type CadastroState } from "./actions";
 
 const estadoInicial: CadastroState = {};
@@ -62,6 +62,25 @@ export default function CadastroPage() {
           value={whatsapp}
           onChange={(e) => setWhatsapp(maskPhone(e.target.value))}
         />
+
+        <div>
+          <label className="label-field" htmlFor="tipo_mei">
+            Tipo de MEI
+          </label>
+          <select
+            id="tipo_mei"
+            name="tipo_mei"
+            className="input-field"
+            defaultValue="mei"
+            required
+          >
+            {TIPOS_MEI.map((t) => (
+              <option key={t.value} value={t.value}>
+                {t.label} — limite {formatBRL(t.limite)}/ano
+              </option>
+            ))}
+          </select>
+        </div>
 
         <div>
           <label className="label-field" htmlFor="tipo_atividade">

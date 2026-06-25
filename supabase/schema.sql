@@ -26,6 +26,7 @@ create table if not exists public.tenants (
   nome_contador      text,
   whatsapp_contador  text,
   tipo_atividade     text check (tipo_atividade in ('comercio', 'servico', 'misto')),
+  tipo_mei           text not null default 'mei' check (tipo_mei in ('mei', 'mei_caminhoneiro')),
   plano              text not null default 'gratuito',
   user_id            uuid not null references auth.users(id) on delete cascade,
   created_at         timestamptz not null default now()

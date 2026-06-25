@@ -7,6 +7,7 @@ const itens = [
   { href: "/app", label: "Lançar", icon: "🚦" },
   { href: "/app/historico", label: "Histórico", icon: "📊" },
   { href: "/app/relatorio", label: "Relatório", icon: "📤" },
+  { href: "/app/perfil", label: "Perfil", icon: "👤" },
 ];
 
 export default function AppNav() {

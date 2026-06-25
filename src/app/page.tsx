@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Logo from "@/components/Logo";
-import { LIMITE_MEI } from "@/lib/constants";
+import { MEI_LIMITE } from "@/lib/constants";
 import { formatBRL } from "@/lib/format";
 
 export default function LandingPage() {
@@ -30,7 +30,7 @@ export default function LandingPage() {
 
         <p className="mt-5 max-w-xl text-lg text-gray-600">
           Lance suas vendas todo mês, veja num semáforo se está perto do limite
-          de {formatBRL(LIMITE_MEI)} e mande o relatório pro seu contador pelo
+          de {formatBRL(MEI_LIMITE)} e mande o relatório pro seu contador pelo
           WhatsApp. Simples assim.
         </p>
 

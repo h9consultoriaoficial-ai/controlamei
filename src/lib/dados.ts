@@ -26,7 +26,8 @@ interface LancamentoRow {
 export async function carregarAno(
   supabase: SupabaseClient,
   tenantId: string,
-  ano: number
+  ano: number,
+  limite: number
 ): Promise<{ resumo: ResumoAnual; ranking: CategoriaGasto[] }> {
   const { data } = await supabase
     .from("lancamentos")
@@ -41,7 +42,8 @@ export async function carregarAno(
       mes: r.mes,
       valor: Number(r.valor) || 0,
       tipo: r.tipo,
-    }))
+    })),
+    limite
   );
 
   const despesas = rows

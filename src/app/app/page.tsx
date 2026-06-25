@@ -6,7 +6,7 @@ import { createClient } from "@/lib/supabase/server";
 import { carregarAno } from "@/lib/dados";
 import { garantirCategoriasPadrao } from "@/lib/categorias";
 import { formatBRL } from "@/lib/format";
-import { LIMITE_MEI } from "@/lib/constants";
+import { getLimite, labelTipoMei } from "@/lib/constants";
 
 export const dynamic = "force-dynamic";
 
@@ -19,7 +19,7 @@ export default async function AppHomePage() {
   const mesAtual = agora.getMonth() + 1;
 
   const [{ resumo }, categorias] = await Promise.all([
-    carregarAno(supabase, tenant.id, ano),
+    carregarAno(supabase, tenant.id, ano, getLimite(tenant.tipo_mei)),
     garantirCategoriasPadrao(supabase, tenant.id),
   ]);
 
@@ -31,7 +31,10 @@ export default async function AppHomePage() {
         <h1 className="text-2xl font-extrabold text-gray-900">
           Olá, {primeiroNome}! 👋
         </h1>
-        <p className="text-gray-500">Faturamento de {ano}</p>
+        <p className="text-gray-500">
+          {labelTipoMei(tenant.tipo_mei)} · Limite {formatBRL(resumo.limite)} ·{" "}
+          {ano}
+        </p>
       </div>
 
       <Semaforo status={resumo.status} pctUsado={resumo.pctUsado} />
@@ -47,10 +50,27 @@ export default async function AppHomePage() {
         </div>
       )}
 
-      {resumo.status === "vermelho" && (
+      {resumo.critico ? (
+        <div className="rounded-2xl border-2 border-red-500 bg-red-100 px-5 py-4">
+          <p className="font-bold text-red-900">
+            ⛔ Situação crítica: você passou de 120% do limite!
+          </p>
+          <p className="mt-1 text-sm text-red-800">
+            Já passou de {formatBRL(resumo.limite)}. O risco de
+            desenquadramento do MEI é alto — fale com seu contador o quanto
+            antes.
+          </p>
+          <Link
+            href="/app/relatorio"
+            className="mt-3 inline-flex rounded-xl bg-red-700 px-4 py-2 text-sm font-semibold text-white hover:bg-red-800"
+          >
+            Fale com seu contador
+          </Link>
+        </div>
+      ) : resumo.status === "vermelho" ? (
         <div className="rounded-2xl border border-red-300 bg-red-50 px-5 py-4">
           <p className="font-bold text-red-800">
-            🚨 Você ultrapassou o limite de {formatBRL(LIMITE_MEI)}!
+            🚨 Você ultrapassou o limite de {formatBRL(resumo.limite)}!
           </p>
           <p className="mt-1 text-sm text-red-700">
             Fale com seu contador para entender como regularizar e evitar
@@ -63,7 +83,7 @@ export default async function AppHomePage() {
             Fale com seu contador
           </Link>
         </div>
-      )}
+      ) : null}
 
       {/* Resumo: faturamento (receitas) vs disponível */}
       <div className="grid grid-cols-2 gap-3">

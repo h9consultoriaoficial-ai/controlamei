@@ -5,6 +5,7 @@ import { getTenantOrRedirect } from "@/lib/tenant";
 import { createClient } from "@/lib/supabase/server";
 import { carregarAno } from "@/lib/dados";
 import { formatBRL, formatPct } from "@/lib/format";
+import { getLimite } from "@/lib/constants";
 
 export const dynamic = "force-dynamic";
 
@@ -13,7 +14,12 @@ export default async function HistoricoPage() {
   const supabase = createClient();
 
   const ano = new Date().getFullYear();
-  const { resumo, ranking } = await carregarAno(supabase, tenant.id, ano);
+  const { resumo, ranking } = await carregarAno(
+    supabase,
+    tenant.id,
+    ano,
+    getLimite(tenant.tipo_mei)
+  );
 
   return (
     <div className="flex flex-col gap-5">

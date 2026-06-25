@@ -1,5 +1,6 @@
 export type TipoAtividade = "comercio" | "servico" | "misto";
 export type TipoLancamento = "receita" | "despesa";
+export type TipoMei = "mei" | "mei_caminhoneiro";
 
 export interface Tenant {
   id: string;
@@ -9,6 +10,7 @@ export interface Tenant {
   nome_contador: string | null;
   whatsapp_contador: string | null;
   tipo_atividade: TipoAtividade | null;
+  tipo_mei: TipoMei;
   plano: string;
   user_id: string;
   created_at: string;

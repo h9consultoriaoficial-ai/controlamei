@@ -6,7 +6,7 @@ import RankingCategorias from "@/components/RankingCategorias";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { carregarAno } from "@/lib/dados";
 import { formatBRL, formatPct, formatCPF } from "@/lib/format";
-import { LIMITE_MEI, TIPOS_ATIVIDADE } from "@/lib/constants";
+import { getLimite, labelTipoMei, TIPOS_ATIVIDADE } from "@/lib/constants";
 import type { Relatorio, Tenant } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
@@ -37,12 +37,18 @@ async function carregar(token: string) {
     .maybeSingle();
 
   if (!tenant) return null;
+  const t = tenant as Tenant;
 
-  // 3) Resumo + ranking do ano do relatório.
+  // 3) Resumo + ranking do ano do relatório (limite conforme o tipo de MEI).
   const ano = rel.ano ?? new Date().getFullYear();
-  const { resumo, ranking } = await carregarAno(admin, rel.tenant_id, ano);
+  const { resumo, ranking } = await carregarAno(
+    admin,
+    rel.tenant_id,
+    ano,
+    getLimite(t.tipo_mei)
+  );
 
-  return { tenant: tenant as Tenant, ano, resumo, ranking };
+  return { tenant: t, ano, resumo, ranking };
 }
 
 export default async function RelatorioPublicoPage({
@@ -78,6 +84,7 @@ export default async function RelatorioPublicoPage({
           <dl className="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-2">
             <Item rotulo="Nome" valor={tenant.nome} />
             <Item rotulo="CPF" valor={formatCPF(tenant.cpf)} />
+            <Item rotulo="Tipo de MEI" valor={labelTipoMei(tenant.tipo_mei)} />
             <Item rotulo="Atividade" valor={tipoLabel} />
             {tenant.whatsapp && <Item rotulo="Contato" valor={tenant.whatsapp} />}
           </dl>
@@ -111,8 +118,8 @@ export default async function RelatorioPublicoPage({
             <Resumo titulo="% do limite" valor={formatPct(resumo.pctUsado)} />
           </div>
           <p className="mt-3 text-xs text-gray-400">
-            Limite anual do MEI: {formatBRL(LIMITE_MEI)} (apenas receitas
-            contam para o limite).
+            {labelTipoMei(tenant.tipo_mei)} — limite anual{" "}
+            {formatBRL(resumo.limite)} (apenas receitas contam para o limite).
           </p>
         </div>
 
