@@ -2,28 +2,34 @@
 
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
-import { MESES_CURTOS, MESES_LONGOS } from "@/lib/constants";
+import { FORMAS_PAGAMENTO } from "@/lib/constants";
 import { formatBRL, maskMoeda, moedaParaNumero } from "@/lib/format";
-import { lancar, criarCategoria } from "@/app/app/actions";
+import { lancar, criarCategoria } from "@/app/actions/lancamentos";
 import type { CategoriaOption, TipoLancamento } from "@/lib/types";
 
+function hojeLocal(): string {
+  const d = new Date();
+  const mm = String(d.getMonth() + 1).padStart(2, "0");
+  const dd = String(d.getDate()).padStart(2, "0");
+  return `${d.getFullYear()}-${mm}-${dd}`;
+}
+
 export default function PainelLancamento({
-  ano,
-  receitasPorMes,
-  mesAtual,
   categorias: categoriasIniciais,
 }: {
-  ano: number;
-  receitasPorMes: number[];
-  mesAtual: number; // 1-12
   categorias: CategoriaOption[];
 }) {
   const router = useRouter();
   const [pending, startTransition] = useTransition();
 
   const [tipo, setTipo] = useState<TipoLancamento>("receita");
-  const [mesSelecionado, setMesSelecionado] = useState(mesAtual);
+  const [data, setData] = useState(hojeLocal());
   const [valorTexto, setValorTexto] = useState("");
+  const [formaPagamento, setFormaPagamento] = useState("");
+  const [nomeParte, setNomeParte] = useState("");
+  const [numeroDocumento, setNumeroDocumento] = useState("");
+  const [descricao, setDescricao] = useState("");
+
   const [categorias, setCategorias] =
     useState<CategoriaOption[]>(categoriasIniciais);
   const [categoriaId, setCategoriaId] = useState<string>("");
@@ -37,24 +43,26 @@ export default function PainelLancamento({
   const [salvandoCat, startCatTransition] = useTransition();
   const [catErro, setCatErro] = useState<string | null>(null);
 
-  const valorAtualDoMes = receitasPorMes[mesSelecionado - 1] || 0;
-
-  function selecionarMes(mes: number) {
-    setMesSelecionado(mes);
-    setValorTexto("");
-    setMsg(null);
-  }
+  const ehReceita = tipo === "receita";
+  const labelParte = ehReceita ? "Cliente" : "Fornecedor";
 
   function trocarTipo(novo: TipoLancamento) {
     setTipo(novo);
-    setValorTexto("");
     setMsg(null);
   }
 
   function handleLancar() {
     const valor = moedaParaNumero(valorTexto);
+    if (!data) {
+      setMsg({ tipo: "erro", texto: "Informe a data." });
+      return;
+    }
     if (!valorTexto.trim() || valor <= 0) {
       setMsg({ tipo: "erro", texto: "Digite o valor." });
+      return;
+    }
+    if (!formaPagamento) {
+      setMsg({ tipo: "erro", texto: "Escolha a forma de pagamento." });
       return;
     }
     if (tipo === "despesa" && !categoriaId) {
@@ -65,21 +73,26 @@ export default function PainelLancamento({
 
     startTransition(async () => {
       const res = await lancar({
-        mes: mesSelecionado,
-        ano,
-        valor,
         tipo,
+        valor,
         categoriaId: tipo === "despesa" ? categoriaId : null,
+        data,
+        formaPagamento,
+        nomeParte,
+        numeroDocumento,
+        descricao,
       });
       if (res.ok) {
+        // Mantém data/forma/tipo para lançar vários seguidos; limpa o resto.
         setValorTexto("");
-        const mesNome = MESES_LONGOS[mesSelecionado - 1];
+        setNomeParte("");
+        setNumeroDocumento("");
+        setDescricao("");
         setMsg({
           tipo: "ok",
-          texto:
-            tipo === "receita"
-              ? `Receita de ${mesNome} salva: ${formatBRL(valor)}`
-              : `Despesa de ${mesNome} salva: ${formatBRL(valor)}`,
+          texto: `${ehReceita ? "Receita" : "Despesa"} de ${formatBRL(
+            valor
+          )} salva.`,
         });
         router.refresh();
       } else {
@@ -111,8 +124,6 @@ export default function PainelLancamento({
     });
   }
 
-  const ehReceita = tipo === "receita";
-
   return (
     <div className="card">
       {/* Toggle Receita | Despesa */}
@@ -139,47 +150,9 @@ export default function PainelLancamento({
         </button>
       </div>
 
-      <p className="text-sm text-gray-500">
-        {ehReceita
-          ? "Toque no mês e digite quanto faturou."
-          : "Escolha o mês, a categoria e o valor gasto."}
-      </p>
-
-      {/* Grid de 12 meses */}
-      <div className="mt-4 grid grid-cols-4 gap-2">
-        {MESES_CURTOS.map((nome, i) => {
-          const mes = i + 1;
-          const ativo = mes === mesSelecionado;
-          const temValor = (receitasPorMes[i] || 0) > 0;
-          return (
-            <button
-              key={mes}
-              type="button"
-              onClick={() => selecionarMes(mes)}
-              className={`flex flex-col items-center rounded-xl border-2 px-1 py-2.5 transition-colors ${
-                ativo
-                  ? "border-primary bg-primary text-white"
-                  : temValor
-                  ? "border-primary-light bg-primary-light text-primary"
-                  : "border-gray-200 bg-white text-gray-600"
-              }`}
-            >
-              <span className="text-sm font-bold">{nome}</span>
-              <span
-                className={`mt-0.5 text-[10px] leading-tight ${
-                  ativo ? "text-white/90" : "text-gray-500"
-                }`}
-              >
-                {temValor ? formatBRL(receitasPorMes[i]) : "—"}
-              </span>
-            </button>
-          );
-        })}
-      </div>
-
       {/* Categoria (só despesa) */}
       {!ehReceita && (
-        <div className="mt-5">
+        <div className="mb-4">
           <label className="label-field" htmlFor="categoria">
             Categoria da despesa
           </label>
@@ -215,35 +188,114 @@ export default function PainelLancamento({
         </div>
       )}
 
-      {/* Input do valor */}
-      <div className="mt-5">
-        <label className="label-field" htmlFor="valor">
-          {ehReceita ? "Faturamento" : "Valor da despesa"} de{" "}
-          {MESES_LONGOS[mesSelecionado - 1]}/{ano}
-        </label>
-        {ehReceita && valorAtualDoMes > 0 && (
-          <p className="mb-1.5 text-xs text-gray-500">
-            Valor atual: {formatBRL(valorAtualDoMes)} — digite para substituir.
-          </p>
-        )}
-        <div className="relative">
-          <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-lg font-semibold text-gray-400">
-            R$
-          </span>
+      <div className="flex flex-col gap-4">
+        {/* CAMPO 1 — Data */}
+        <div>
+          <label className="label-field" htmlFor="data">
+            Data
+          </label>
           <input
-            id="valor"
+            id="data"
+            type="date"
+            value={data}
+            onChange={(e) => setData(e.target.value)}
+            className="input-field"
+            required
+          />
+        </div>
+
+        {/* CAMPO 2 — Valor */}
+        <div>
+          <label className="label-field" htmlFor="valor">
+            Valor
+          </label>
+          <div className="relative">
+            <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-lg font-semibold text-gray-400">
+              R$
+            </span>
+            <input
+              id="valor"
+              type="text"
+              inputMode="numeric"
+              value={valorTexto}
+              onInput={(e) =>
+                setValorTexto(maskMoeda((e.target as HTMLInputElement).value))
+              }
+              onChange={(e) => setValorTexto(maskMoeda(e.target.value))}
+              placeholder="0,00"
+              className="input-field py-4 pl-12 text-2xl font-bold"
+            />
+          </div>
+        </div>
+
+        {/* CAMPO 3 — Forma de pagamento */}
+        <div>
+          <label className="label-field" htmlFor="forma">
+            Forma de pagamento
+          </label>
+          <select
+            id="forma"
+            value={formaPagamento}
+            onChange={(e) => setFormaPagamento(e.target.value)}
+            className="input-field"
+            required
+          >
+            <option value="" disabled>
+              Escolha...
+            </option>
+            {FORMAS_PAGAMENTO.map((f) => (
+              <option key={f} value={f}>
+                {f}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        {/* CAMPO 4 — Cliente / Fornecedor */}
+        <div>
+          <label className="label-field" htmlFor="parte">
+            {labelParte}
+          </label>
+          <input
+            id="parte"
             type="text"
-            inputMode="numeric"
-            value={valorTexto}
-            onInput={(e) =>
-              setValorTexto(maskMoeda((e.target as HTMLInputElement).value))
-            }
-            onChange={(e) => setValorTexto(maskMoeda(e.target.value))}
-            onKeyDown={(e) => {
-              if (e.key === "Enter") handleLancar();
-            }}
-            placeholder="0,00"
-            className="input-field py-4 pl-12 text-2xl font-bold"
+            maxLength={100}
+            value={nomeParte}
+            onChange={(e) => setNomeParte(e.target.value)}
+            placeholder="Nome (opcional)"
+            className="input-field"
+          />
+        </div>
+
+        {/* CAMPO 5 — Nº do recibo / NF */}
+        <div>
+          <label className="label-field" htmlFor="documento">
+            Nº do recibo / NF
+          </label>
+          <input
+            id="documento"
+            type="text"
+            maxLength={50}
+            value={numeroDocumento}
+            onChange={(e) => setNumeroDocumento(e.target.value)}
+            placeholder="ex: 000123 (opcional)"
+            className="input-field"
+          />
+        </div>
+
+        {/* CAMPO 6 — Descrição */}
+        <div>
+          <label className="label-field" htmlFor="descricao">
+            Descrição
+          </label>
+          <textarea
+            id="descricao"
+            rows={2}
+            maxLength={200}
+            value={descricao}
+            onChange={(e) => setDescricao(e.target.value)}
+            placeholder="Observação (opcional)"
+            className="input-field resize-none"
           />
         </div>
       </div>

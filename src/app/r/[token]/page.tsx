@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import Logo from "@/components/Logo";
 import TabelaMensal from "@/components/TabelaMensal";
+import TabelaLancamentos from "@/components/TabelaLancamentos";
 import RankingCategorias from "@/components/RankingCategorias";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { carregarAno } from "@/lib/dados";
@@ -41,14 +42,14 @@ async function carregar(token: string) {
 
   // 3) Resumo + ranking do ano do relatório (limite conforme o tipo de MEI).
   const ano = rel.ano ?? new Date().getFullYear();
-  const { resumo, ranking } = await carregarAno(
+  const { resumo, ranking, lancamentos } = await carregarAno(
     admin,
     rel.tenant_id,
     ano,
     getLimite(t.tipo_mei)
   );
 
-  return { tenant: t, ano, resumo, ranking };
+  return { tenant: t, ano, resumo, ranking, lancamentos };
 }
 
 export default async function RelatorioPublicoPage({
@@ -59,7 +60,8 @@ export default async function RelatorioPublicoPage({
   const dados = await carregar(params.token);
   if (!dados) notFound();
 
-  const { tenant, ano, resumo, ranking } = dados;
+  const { tenant, ano, resumo, ranking, lancamentos } = dados;
+  const cronologico = [...lancamentos].reverse(); // mais antigo -> mais recente
   const tipoLabel =
     TIPOS_ATIVIDADE.find((t) => t.value === tenant.tipo_atividade)?.label ||
     "—";
@@ -140,6 +142,14 @@ export default async function RelatorioPublicoPage({
             Despesas por categoria
           </h2>
           <RankingCategorias ranking={ranking} />
+        </div>
+
+        {/* Lançamentos detalhados */}
+        <div className="border-t border-gray-100 bg-white px-6 py-5">
+          <h2 className="mb-3 text-sm font-bold uppercase tracking-wide text-gray-400">
+            Lançamentos detalhados
+          </h2>
+          <TabelaLancamentos lancamentos={cronologico} completa />
         </div>
 
         {/* Rodapé */}

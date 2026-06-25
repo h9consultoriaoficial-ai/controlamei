@@ -1,5 +1,6 @@
 import EnviarContador from "@/components/EnviarContador";
 import TabelaMensal from "@/components/TabelaMensal";
+import TabelaLancamentos from "@/components/TabelaLancamentos";
 import RankingCategorias from "@/components/RankingCategorias";
 import { getTenantOrRedirect } from "@/lib/tenant";
 import { createClient } from "@/lib/supabase/server";
@@ -14,12 +15,13 @@ export default async function RelatorioPage() {
   const supabase = createClient();
 
   const ano = new Date().getFullYear();
-  const { resumo, ranking } = await carregarAno(
+  const { resumo, ranking, lancamentos } = await carregarAno(
     supabase,
     tenant.id,
     ano,
     getLimite(tenant.tipo_mei)
   );
+  const cronologico = [...lancamentos].reverse(); // mais antigo -> mais recente
 
   return (
     <div className="flex flex-col gap-5">
@@ -78,6 +80,16 @@ export default async function RelatorioPage() {
           Despesas por categoria
         </h2>
         <RankingCategorias ranking={ranking} />
+      </div>
+
+      {/* Lançamentos detalhados */}
+      <div className="card overflow-hidden p-0">
+        <h2 className="border-b border-gray-100 px-5 py-4 text-lg font-bold text-gray-900">
+          Lançamentos detalhados
+        </h2>
+        <div className="px-5 pb-3 pt-1">
+          <TabelaLancamentos lancamentos={cronologico} completa />
+        </div>
       </div>
 
       {/* Dados do contador */}

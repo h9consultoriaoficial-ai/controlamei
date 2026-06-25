@@ -16,7 +16,6 @@ export default async function AppHomePage() {
 
   const agora = new Date();
   const ano = agora.getFullYear();
-  const mesAtual = agora.getMonth() + 1;
 
   const [{ resumo }, categorias] = await Promise.all([
     carregarAno(supabase, tenant.id, ano, getLimite(tenant.tipo_mei)),
@@ -123,12 +122,7 @@ export default async function AppHomePage() {
         </div>
       </div>
 
-      <PainelLancamento
-        ano={ano}
-        receitasPorMes={resumo.receitasPorMes}
-        mesAtual={mesAtual}
-        categorias={categorias}
-      />
+      <PainelLancamento categorias={categorias} />
     </div>
   );
 }

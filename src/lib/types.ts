@@ -40,6 +40,11 @@ export interface Lancamento {
   valor: number;
   tipo: TipoLancamento;
   categoria_id: string | null;
+  data_lancamento: string | null;
+  forma_pagamento: string | null;
+  nome_parte: string | null;
+  numero_documento: string | null;
+  descricao: string | null;
   created_at: string;
 }
 

@@ -82,6 +82,14 @@ export function moedaParaNumero(masked: string): number {
   return parseInt(d, 10) / 100;
 }
 
+/** Formata uma data "YYYY-MM-DD" como "DD/MM/AAAA". Retorna "—" se vazia. */
+export function formatData(data: string | null | undefined): string {
+  if (!data) return "—";
+  const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(data);
+  if (!m) return data;
+  return `${m[3]}/${m[2]}/${m[1]}`;
+}
+
 /** Mascara um CPF (000.000.000-00) se tiver 11 dígitos. */
 export function formatCPF(cpf: string | null | undefined): string {
   const d = onlyDigits(cpf);

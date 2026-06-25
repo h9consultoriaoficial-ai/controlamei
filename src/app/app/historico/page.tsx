@@ -1,5 +1,6 @@
 import HistoricoChart from "@/components/HistoricoChart";
 import TabelaMensal from "@/components/TabelaMensal";
+import TabelaLancamentos from "@/components/TabelaLancamentos";
 import RankingCategorias from "@/components/RankingCategorias";
 import { getTenantOrRedirect } from "@/lib/tenant";
 import { createClient } from "@/lib/supabase/server";
@@ -14,7 +15,7 @@ export default async function HistoricoPage() {
   const supabase = createClient();
 
   const ano = new Date().getFullYear();
-  const { resumo, ranking } = await carregarAno(
+  const { resumo, ranking, lancamentos } = await carregarAno(
     supabase,
     tenant.id,
     ano,
@@ -85,6 +86,16 @@ export default async function HistoricoPage() {
           Onde seu dinheiro foi gasto em {ano}.
         </p>
         <RankingCategorias ranking={ranking} />
+      </div>
+
+      {/* Lançamentos recentes (últimos 20) */}
+      <div className="card overflow-hidden p-0">
+        <h2 className="border-b border-gray-100 px-5 py-4 text-lg font-bold text-gray-900">
+          Lançamentos recentes
+        </h2>
+        <div className="px-5 pb-3 pt-1">
+          <TabelaLancamentos lancamentos={lancamentos.slice(0, 20)} />
+        </div>
       </div>
     </div>
   );

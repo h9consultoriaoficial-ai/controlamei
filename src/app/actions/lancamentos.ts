@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import type { CategoriaOption, TipoLancamento } from "@/lib/types";
+import { FORMAS_PAGAMENTO } from "@/lib/constants";
 
 export interface LancarResult {
   ok: boolean;
@@ -28,26 +29,38 @@ async function getTenantId(
 }
 
 /**
- * Lança uma receita ou despesa.
- *  - receita: 1 por mês (substitui o valor existente);
- *  - despesa: acumula (cada lançamento é uma nova linha) e exige categoria.
- * RLS garante que só mexe no tenant do próprio usuário.
+ * Lança uma receita ou despesa (cada lançamento é uma linha — múltiplos
+ * por mês são permitidos). mes/ano são derivados de data_lancamento.
+ * Obrigatórios: data, valor, forma de pagamento (e categoria, se despesa).
+ * Opcionais: nome da parte, número do documento, descrição.
  */
 export async function lancar(input: {
-  mes: number;
-  ano: number;
-  valor: number;
   tipo: TipoLancamento;
+  valor: number;
   categoriaId?: string | null;
+  data: string; // YYYY-MM-DD
+  formaPagamento: string;
+  nomeParte?: string | null;
+  numeroDocumento?: string | null;
+  descricao?: string | null;
 }): Promise<LancarResult> {
-  const mes = Number(input.mes);
-  const ano = Number(input.ano);
-  const valor = Number(input.valor);
   const tipo: TipoLancamento = input.tipo === "despesa" ? "despesa" : "receita";
+  const valor = Number(input.valor);
+  const data = (input.data || "").trim();
 
-  if (!(mes >= 1 && mes <= 12)) return { ok: false, error: "Mês inválido." };
-  if (!ano || ano < 2000) return { ok: false, error: "Ano inválido." };
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(data);
+  if (!m) return { ok: false, error: "Informe uma data válida." };
+  const ano = parseInt(m[1], 10);
+  const mes = parseInt(m[2], 10);
+  if (!(mes >= 1 && mes <= 12) || ano < 2000)
+    return { ok: false, error: "Data inválida." };
+
   if (isNaN(valor) || valor <= 0) return { ok: false, error: "Valor inválido." };
+
+  const formaPagamento = (input.formaPagamento || "").trim();
+  if (!FORMAS_PAGAMENTO.includes(formaPagamento as (typeof FORMAS_PAGAMENTO)[number]))
+    return { ok: false, error: "Escolha a forma de pagamento." };
+
   if (tipo === "despesa" && !input.categoriaId)
     return { ok: false, error: "Escolha a categoria da despesa." };
 
@@ -55,39 +68,26 @@ export async function lancar(input: {
   const { tenantId, error } = await getTenantId(supabase);
   if (!tenantId) return { ok: false, error };
 
-  if (tipo === "receita") {
-    // Uma receita por mês: atualiza se já existir, senão insere.
-    const { data: existente } = await supabase
-      .from("lancamentos")
-      .select("id")
-      .eq("tenant_id", tenantId)
-      .eq("mes", mes)
-      .eq("ano", ano)
-      .eq("tipo", "receita")
-      .maybeSingle();
+  const nome_parte = (input.nomeParte || "").trim().slice(0, 100) || null;
+  const numero_documento =
+    (input.numeroDocumento || "").trim().slice(0, 50) || null;
+  const descricao = (input.descricao || "").trim().slice(0, 200) || null;
 
-    const res = existente
-      ? await supabase
-          .from("lancamentos")
-          .update({ valor })
-          .eq("id", existente.id)
-      : await supabase
-          .from("lancamentos")
-          .insert({ tenant_id: tenantId, mes, ano, valor, tipo: "receita" });
+  const { error: insErr } = await supabase.from("lancamentos").insert({
+    tenant_id: tenantId,
+    mes,
+    ano,
+    valor,
+    tipo,
+    categoria_id: tipo === "despesa" ? input.categoriaId : null,
+    data_lancamento: data,
+    forma_pagamento: formaPagamento,
+    nome_parte,
+    numero_documento,
+    descricao,
+  });
 
-    if (res.error) return { ok: false, error: "Não foi possível salvar." };
-  } else {
-    // Despesa: acumula.
-    const { error: insErr } = await supabase.from("lancamentos").insert({
-      tenant_id: tenantId,
-      mes,
-      ano,
-      valor,
-      tipo: "despesa",
-      categoria_id: input.categoriaId,
-    });
-    if (insErr) return { ok: false, error: "Não foi possível salvar." };
-  }
+  if (insErr) return { ok: false, error: "Não foi possível salvar. Tente de novo." };
 
   revalidatePath("/app");
   revalidatePath("/app/historico");

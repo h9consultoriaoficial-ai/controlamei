@@ -71,6 +71,16 @@ export const TIPOS_ATIVIDADE = [
   { value: "misto", label: "Misto (comércio + serviço)" },
 ] as const;
 
+/** Formas de pagamento aceitas no lançamento. */
+export const FORMAS_PAGAMENTO = [
+  "PIX",
+  "Dinheiro",
+  "Cartão débito",
+  "Cartão crédito",
+  "Boleto",
+  "Outros",
+] as const;
+
 /**
  * Categorias de despesa padrão, criadas por tenant no cadastro.
  * NÃO são globais — cada MEI recebe a sua cópia (isolamento multi-tenant).

@@ -54,25 +54,27 @@ create index if not exists idx_categorias_tenant on public.categorias_despesa(te
 --  - despesa: várias por mês, com categoria_id
 -- ---------------------------------------------------------------------
 create table if not exists public.lancamentos (
-  id            uuid primary key default gen_random_uuid(),
-  tenant_id     uuid not null references public.tenants(id) on delete cascade,
-  mes           int not null check (mes between 1 and 12),
-  ano           int not null,
-  valor         numeric not null default 0,
-  tipo          text not null default 'receita' check (tipo in ('receita', 'despesa')),
-  categoria_id  uuid references public.categorias_despesa(id),
-  created_at    timestamptz not null default now()
+  id               uuid primary key default gen_random_uuid(),
+  tenant_id        uuid not null references public.tenants(id) on delete cascade,
+  mes              int not null check (mes between 1 and 12),
+  ano              int not null,
+  valor            numeric not null default 0,
+  tipo             text not null default 'receita' check (tipo in ('receita', 'despesa')),
+  categoria_id     uuid references public.categorias_despesa(id),
+  data_lancamento  date,
+  forma_pagamento  text,
+  nome_parte       text,
+  numero_documento text,
+  descricao        text,
+  created_at       timestamptz not null default now()
 );
 
+-- Múltiplos lançamentos por mês são permitidos (receitas e despesas).
 create index if not exists idx_lancamentos_tenant on public.lancamentos(tenant_id);
 create index if not exists idx_lancamentos_tenant_ano on public.lancamentos(tenant_id, ano);
 create index if not exists idx_lancamentos_categoria on public.lancamentos(categoria_id);
 create index if not exists idx_lancamentos_tipo on public.lancamentos(tenant_id, ano, tipo);
-
--- 1 receita por mês (despesas podem ter várias)
-create unique index if not exists uniq_lancamentos_receita_mes
-  on public.lancamentos(tenant_id, mes, ano)
-  where tipo = 'receita';
+create index if not exists idx_lancamentos_data on public.lancamentos(tenant_id, data_lancamento);
 
 -- ---------------------------------------------------------------------
 -- Tabela: relatorios (link público gerado para o contador)
