@@ -26,7 +26,7 @@ público pagante. Baseado na skill `saas-multitenant-seguro`.
 
 - [ ] **Supabase plano Pro.** O plano gratuito **pausa após ~1 semana** de
       inatividade e derruba o app. Migrar para Pro antes de ter clientes.
-- [ ] **Domínio próprio** (`controlamei.com.br`) na Vercel.
+- [ ] **Domínio próprio** (`meinolimite.com.br`) na Vercel.
 - [ ] **Open Graph / preview no WhatsApp.** Para o link do relatório mostrar
       preview bonito: domínio próprio + imagem JPEG < 600KB (não funciona em
       `*.vercel.app` nem com PNG transparente).

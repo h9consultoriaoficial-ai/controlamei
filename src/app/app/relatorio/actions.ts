@@ -17,7 +17,7 @@ export interface GerarRelatorioResult {
 
 function baseUrl(): string {
   const h = headers();
-  const host = h.get("host") || "controlamei.com.br";
+  const host = h.get("host") || "meinolimite.com.br";
   const proto = host.includes("localhost") ? "http" : "https";
   return `${proto}://${host}`;
 }

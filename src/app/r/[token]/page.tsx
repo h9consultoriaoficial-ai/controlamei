@@ -137,7 +137,7 @@ export default async function RelatorioPublicoPage({
 
         {/* Rodapé */}
         <div className="rounded-b-2xl border-t border-gray-100 bg-white px-6 py-5 text-center text-sm text-gray-400">
-          Gerado pelo MEI no Limite — controlamei.com.br
+          Gerado pelo MEI no Limite — meinolimite.com.br
         </div>
       </div>
     </main>

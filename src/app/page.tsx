@@ -64,7 +64,7 @@ export default function LandingPage() {
       </section>
 
       <footer className="mx-auto w-full max-w-5xl px-5 py-8 text-center text-sm text-gray-400">
-        MEI no Limite — controlamei.com.br
+        MEI no Limite — meinolimite.com.br
       </footer>
     </main>
   );
