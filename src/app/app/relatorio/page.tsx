@@ -1,4 +1,5 @@
 import EnviarContador from "@/components/EnviarContador";
+import TabelaMensal from "@/components/TabelaMensal";
 import { getTenantOrRedirect } from "@/lib/tenant";
 import { createClient } from "@/lib/supabase/server";
 import { calcularResumo } from "@/lib/mei";
@@ -31,16 +32,24 @@ export default async function RelatorioPage() {
         </p>
       </div>
 
-      {/* Resumo do ano */}
-      <div className="card flex flex-col gap-3">
-        <Linha titulo="Faturamento total" valor={formatBRL(resumo.total)} />
-        <Linha titulo="Limite anual" valor={formatBRL(LIMITE_MEI)} />
-        <Linha titulo="Disponível" valor={formatBRL(resumo.disponivel)} />
-        <div className="border-t border-gray-100 pt-3">
-          <Linha
-            titulo="% do limite usado"
-            valor={formatPct(resumo.pctUsado)}
-            destaque
+      {/* Cards de resumo */}
+      <div className="grid grid-cols-2 gap-3">
+        <Card titulo="Faturamento total" valor={formatBRL(resumo.total)} destaque />
+        <Card titulo="Limite anual" valor={formatBRL(LIMITE_MEI)} />
+        <Card titulo="Disponível" valor={formatBRL(resumo.disponivel)} />
+        <Card titulo="% do limite usado" valor={formatPct(resumo.pctUsado)} />
+      </div>
+
+      {/* Tabela detalhada mês a mês */}
+      <div className="card overflow-hidden p-0">
+        <h2 className="border-b border-gray-100 px-5 py-4 text-lg font-bold text-gray-900">
+          Detalhe por mês — {ano}
+        </h2>
+        <div className="px-5 pb-3 pt-1">
+          <TabelaMensal
+            valoresPorMes={resumo.valoresPorMes}
+            total={resumo.total}
+            pctUsado={resumo.pctUsado}
           />
         </div>
       </div>
@@ -66,7 +75,7 @@ export default async function RelatorioPage() {
   );
 }
 
-function Linha({
+function Card({
   titulo,
   valor,
   destaque,
@@ -76,15 +85,15 @@ function Linha({
   destaque?: boolean;
 }) {
   return (
-    <div className="flex items-center justify-between">
-      <span className="text-gray-600">{titulo}</span>
-      <span
-        className={`font-bold ${
-          destaque ? "text-lg text-primary" : "text-gray-900"
+    <div className="card">
+      <p className="text-sm text-gray-500">{titulo}</p>
+      <p
+        className={`mt-1 text-xl font-extrabold ${
+          destaque ? "text-primary" : "text-gray-900"
         }`}
       >
         {valor}
-      </span>
+      </p>
     </div>
   );
 }

@@ -44,6 +44,44 @@ export function onlyDigits(s: string | null | undefined): string {
   return (s || "").replace(/\D/g, "");
 }
 
+/**
+ * Aplica máscara de telefone brasileiro em tempo real: (19) 99955-1747.
+ * Aceita só dígitos (até 11) e formata progressivamente conforme o usuário
+ * digita. Para salvar no banco, use onlyDigits() no valor.
+ */
+export function maskPhone(value: string): string {
+  const d = onlyDigits(value).slice(0, 11);
+  if (d.length === 0) return "";
+  if (d.length <= 2) return `(${d}`;
+  if (d.length <= 6) return `(${d.slice(0, 2)}) ${d.slice(2)}`;
+  if (d.length <= 10)
+    return `(${d.slice(0, 2)}) ${d.slice(2, 6)}-${d.slice(6)}`;
+  // 11 dígitos (celular): (XX) XXXXX-XXXX
+  return `(${d.slice(0, 2)}) ${d.slice(2, 7)}-${d.slice(7)}`;
+}
+
+/**
+ * Máscara de moeda em tempo real (centavos da direita p/ esquerda).
+ * Ex.: digita "485200" -> "4.852,00". Retorna só a parte numérica
+ * formatada (o "R$" fica no layout). Use moedaParaNumero() para salvar.
+ */
+export function maskMoeda(value: string): string {
+  const d = onlyDigits(value);
+  if (!d) return "";
+  const cents = parseInt(d, 10);
+  return (cents / 100).toLocaleString("pt-BR", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
+}
+
+/** Converte o texto mascarado de moeda em número (ex.: "4.852,00" -> 4852). */
+export function moedaParaNumero(masked: string): number {
+  const d = onlyDigits(masked);
+  if (!d) return 0;
+  return parseInt(d, 10) / 100;
+}
+
 /** Mascara um CPF (000.000.000-00) se tiver 11 dígitos. */
 export function formatCPF(cpf: string | null | undefined): string {
   const d = onlyDigits(cpf);

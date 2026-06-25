@@ -5,6 +5,7 @@ import { useFormState, useFormStatus } from "react-dom";
 import { useState } from "react";
 import Logo from "@/components/Logo";
 import { TIPOS_ATIVIDADE } from "@/lib/constants";
+import { maskPhone } from "@/lib/format";
 import { cadastrar, type CadastroState } from "./actions";
 
 const estadoInicial: CadastroState = {};
@@ -12,6 +13,8 @@ const estadoInicial: CadastroState = {};
 export default function CadastroPage() {
   const [state, formAction] = useFormState(cadastrar, estadoInicial);
   const [verSenha, setVerSenha] = useState(false);
+  const [whatsapp, setWhatsapp] = useState("");
+  const [whatsappContador, setWhatsappContador] = useState("");
 
   return (
     <main className="mx-auto flex min-h-screen w-full max-w-md flex-col px-5 py-8">
@@ -53,8 +56,11 @@ export default function CadastroPage() {
         <Campo
           label="Seu WhatsApp"
           name="whatsapp"
-          placeholder="(11) 99999-9999"
-          inputMode="tel"
+          type="tel"
+          inputMode="numeric"
+          placeholder="(19) 99955-1747"
+          value={whatsapp}
+          onChange={(e) => setWhatsapp(maskPhone(e.target.value))}
         />
 
         <div>
@@ -91,8 +97,11 @@ export default function CadastroPage() {
         <Campo
           label="WhatsApp do contador"
           name="whatsapp_contador"
-          placeholder="(11) 99999-9999"
-          inputMode="tel"
+          type="tel"
+          inputMode="numeric"
+          placeholder="(19) 99955-1747"
+          value={whatsappContador}
+          onChange={(e) => setWhatsappContador(maskPhone(e.target.value))}
         />
 
         <hr className="my-1 border-gray-100" />

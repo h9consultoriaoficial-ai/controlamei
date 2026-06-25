@@ -3,7 +3,7 @@
 import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { MESES_CURTOS, MESES_LONGOS } from "@/lib/constants";
-import { formatBRL, parseValorInput } from "@/lib/format";
+import { formatBRL, maskMoeda, moedaParaNumero } from "@/lib/format";
 import { lancar } from "@/app/app/actions";
 
 export default function PainelLancamento({
@@ -32,7 +32,7 @@ export default function PainelLancamento({
   }
 
   function handleLancar() {
-    const valor = parseValorInput(valorTexto);
+    const valor = moedaParaNumero(valorTexto);
     if (!valorTexto.trim() || valor <= 0) {
       setMsg({ tipo: "erro", texto: "Digite o valor faturado no mês." });
       return;
@@ -110,9 +110,13 @@ export default function PainelLancamento({
           </span>
           <input
             id="valor"
-            inputMode="decimal"
+            type="text"
+            inputMode="numeric"
             value={valorTexto}
-            onChange={(e) => setValorTexto(e.target.value)}
+            onInput={(e) =>
+              setValorTexto(maskMoeda((e.target as HTMLInputElement).value))
+            }
+            onChange={(e) => setValorTexto(maskMoeda(e.target.value))}
             onKeyDown={(e) => {
               if (e.key === "Enter") handleLancar();
             }}

@@ -1,10 +1,11 @@
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import Logo from "@/components/Logo";
+import TabelaMensal from "@/components/TabelaMensal";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { calcularResumo } from "@/lib/mei";
 import { formatBRL, formatPct, formatCPF } from "@/lib/format";
-import { LIMITE_MEI, MESES_LONGOS, TIPOS_ATIVIDADE } from "@/lib/constants";
+import { LIMITE_MEI, TIPOS_ATIVIDADE } from "@/lib/constants";
 import type { Lancamento, Relatorio, Tenant } from "@/lib/types";
 
 export const dynamic = "force-dynamic";
@@ -110,31 +111,14 @@ export default async function RelatorioPublicoPage({
 
         {/* Tabela mês a mês */}
         <div className="border-t border-gray-100 bg-white px-6 py-5">
-          <h2 className="text-sm font-bold uppercase tracking-wide text-gray-400">
+          <h2 className="mb-3 text-sm font-bold uppercase tracking-wide text-gray-400">
             Faturamento mês a mês
           </h2>
-          <table className="mt-3 w-full text-sm">
-            <tbody>
-              {resumo.valoresPorMes.map((valor, i) => (
-                <tr key={i} className="border-b border-gray-50">
-                  <td className="py-2 text-gray-600">{MESES_LONGOS[i]}</td>
-                  <td
-                    className={`py-2 text-right font-semibold ${
-                      valor > 0 ? "text-gray-900" : "text-gray-300"
-                    }`}
-                  >
-                    {valor > 0 ? formatBRL(valor) : "—"}
-                  </td>
-                </tr>
-              ))}
-              <tr>
-                <td className="py-3 font-bold text-primary">Total anual</td>
-                <td className="py-3 text-right text-lg font-extrabold text-primary">
-                  {formatBRL(resumo.total)}
-                </td>
-              </tr>
-            </tbody>
-          </table>
+          <TabelaMensal
+            valoresPorMes={resumo.valoresPorMes}
+            total={resumo.total}
+            pctUsado={resumo.pctUsado}
+          />
         </div>
 
         {/* Rodapé */}
