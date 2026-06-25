@@ -6,7 +6,7 @@ import { createClient } from "@/lib/supabase/server";
 import { carregarAno } from "@/lib/dados";
 import { garantirCategoriasPadrao } from "@/lib/categorias";
 import { formatBRL } from "@/lib/format";
-import { getLimite, labelTipoMei } from "@/lib/constants";
+import { getLimite, labelTipoMei, MESES_CURTOS } from "@/lib/constants";
 
 export const dynamic = "force-dynamic";
 
@@ -16,6 +16,7 @@ export default async function AppHomePage() {
 
   const agora = new Date();
   const ano = agora.getFullYear();
+  const mesAtualIdx = agora.getMonth(); // 0-11
 
   const [{ resumo }, categorias] = await Promise.all([
     carregarAno(supabase, tenant.id, ano, getLimite(tenant.tipo_mei)),
@@ -119,6 +120,39 @@ export default async function AppHomePage() {
           >
             {formatBRL(resumo.saldoLiquido)}
           </p>
+        </div>
+      </div>
+
+      {/* Faturamento por mês */}
+      <div className="card">
+        <h2 className="mb-3 text-lg font-bold text-gray-900">
+          Faturamento por mês
+        </h2>
+        <div className="grid grid-cols-3 gap-2">
+          {MESES_CURTOS.map((nome, i) => {
+            const valor = resumo.receitasPorMes[i] || 0;
+            const limiteMensal = resumo.limite / 12;
+            const alto = valor > limiteMensal * 0.8;
+            const ehAtual = i === mesAtualIdx;
+            const corFundo = alto
+              ? "bg-amber-100"
+              : valor > 0
+              ? "bg-primary-light"
+              : "bg-gray-100";
+            return (
+              <div
+                key={nome}
+                className={`rounded-xl px-2 py-3 text-center ${corFundo} ${
+                  ehAtual ? "border-2 border-primary" : "border-2 border-transparent"
+                }`}
+              >
+                <p className="text-xs font-bold text-gray-700">{nome}</p>
+                <p className="mt-0.5 text-[11px] font-semibold text-gray-900">
+                  {formatBRL(valor)}
+                </p>
+              </div>
+            );
+          })}
         </div>
       </div>
 
