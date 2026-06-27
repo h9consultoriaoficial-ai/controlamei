@@ -9,14 +9,22 @@ const inter = Inter({
   display: "swap",
 });
 
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || "https://meinolimite.com.br";
+
+const TITULO = "MEI no Limite — Seu faturamento sempre no limite certo";
+const DESCRICAO =
+  "Lance suas vendas, acompanhe o limite anual do MEI e envie o relatório pro seu contador pelo WhatsApp.";
+
 export const metadata: Metadata = {
-  title: "MEI no Limite — Seu faturamento sempre no limite certo",
-  description:
-    "Lance suas vendas, acompanhe o limite anual do MEI e envie o relatório pro seu contador pelo WhatsApp.",
+  metadataBase: new URL(SITE_URL),
+  title: TITULO,
+  description: DESCRICAO,
   applicationName: "MEI no Limite",
   manifest: "/manifest.json",
   icons: {
     icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/favicon.svg", type: "image/svg+xml" },
       { url: "/icon-192.png", sizes: "192x192", type: "image/png" },
       { url: "/icon-512.png", sizes: "512x512", type: "image/png" },
     ],
@@ -26,6 +34,28 @@ export const metadata: Metadata = {
     capable: true,
     statusBarStyle: "default",
     title: "MEI no Limite",
+  },
+  openGraph: {
+    type: "website",
+    locale: "pt_BR",
+    url: "/",
+    siteName: "MEI no Limite",
+    title: TITULO,
+    description: DESCRICAO,
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "MEI no Limite",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: TITULO,
+    description: DESCRICAO,
+    images: ["/og-image.png"],
   },
 };
 

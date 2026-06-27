@@ -14,7 +14,7 @@ export default function AppLayout({
       <header className="border-b border-gray-100 bg-white">
         <div className="mx-auto flex w-full max-w-3xl items-center justify-between px-5 py-4">
           <Link href="/app">
-            <Logo size="sm" />
+            <Logo className="h-7 w-auto" />
           </Link>
           <form action="/auth/signout" method="post">
             <button

@@ -1,9 +1,9 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useFormState, useFormStatus } from "react-dom";
 import { useState } from "react";
-import Logo from "@/components/Logo";
 import { TIPOS_ATIVIDADE, TIPOS_MEI } from "@/lib/constants";
 import { formatBRL, maskPhone } from "@/lib/format";
 import { cadastrar, type CadastroState } from "./actions";
@@ -17,140 +17,152 @@ export default function CadastroPage() {
   const [whatsappContador, setWhatsappContador] = useState("");
 
   return (
-    <main className="mx-auto flex min-h-screen w-full max-w-md flex-col px-5 py-8">
-      <Link href="/" className="mb-8">
-        <Logo size="md" />
-      </Link>
+    <main className="flex min-h-screen flex-col items-center justify-center px-5 py-8">
+      <div className="w-full max-w-md rounded-2xl border border-gray-100 bg-white p-6 shadow-sm sm:p-8">
+        <Link href="/" className="mb-5 flex justify-center">
+          <Image
+            src="/logo/vertical-light.svg"
+            alt="MEI no Limite"
+            width={809}
+            height={1024}
+            priority
+            unoptimized
+            className="h-24 w-auto"
+          />
+        </Link>
 
-      <h1 className="text-2xl font-extrabold text-gray-900">Criar conta</h1>
-      <p className="mt-1 text-gray-600">
-        Leva 1 minuto. Depois é só lançar suas vendas.
-      </p>
+        <h1 className="text-center text-xl font-extrabold text-gray-900">
+          Criar conta
+        </h1>
+        <p className="mt-1 text-center text-sm text-gray-600">
+          Leva 1 minuto. Depois é só lançar suas vendas.
+        </p>
 
-      {state.error && (
-        <div className="mt-5 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-700">
-          {state.error}
-        </div>
-      )}
-
-      <form action={formAction} className="mt-6 flex flex-col gap-4">
-        <Campo label="Seu nome" name="nome" placeholder="Maria da Silva" required />
-
-        <Campo
-          label="E-mail (para entrar)"
-          name="email"
-          type="email"
-          placeholder="voce@email.com"
-          autoComplete="email"
-          required
-        />
-
-        <Campo
-          label="CPF"
-          name="cpf"
-          placeholder="000.000.000-00"
-          inputMode="numeric"
-          required
-        />
-
-        <Campo
-          label="Seu WhatsApp"
-          name="whatsapp"
-          type="tel"
-          inputMode="numeric"
-          placeholder="(19) 99955-1747"
-          value={whatsapp}
-          onChange={(e) => setWhatsapp(maskPhone(e.target.value))}
-        />
-
-        <div>
-          <label className="label-field" htmlFor="tipo_mei">
-            Tipo de MEI
-          </label>
-          <select
-            id="tipo_mei"
-            name="tipo_mei"
-            className="input-field"
-            defaultValue="mei"
-            required
-          >
-            {TIPOS_MEI.map((t) => (
-              <option key={t.value} value={t.value}>
-                {t.label} — limite {formatBRL(t.limite)}/ano
-              </option>
-            ))}
-          </select>
-        </div>
-
-        <div>
-          <label className="label-field" htmlFor="tipo_atividade">
-            Tipo de atividade
-          </label>
-          <select
-            id="tipo_atividade"
-            name="tipo_atividade"
-            className="input-field"
-            defaultValue=""
-            required
-          >
-            <option value="" disabled>
-              Escolha...
-            </option>
-            {TIPOS_ATIVIDADE.map((t) => (
-              <option key={t.value} value={t.value}>
-                {t.label}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        <hr className="my-1 border-gray-100" />
-        <p className="text-sm font-semibold text-gray-700">Seu contador</p>
-
-        <Campo
-          label="Nome do contador"
-          name="nome_contador"
-          placeholder="Nome do escritório ou pessoa"
-        />
-
-        <Campo
-          label="WhatsApp do contador"
-          name="whatsapp_contador"
-          type="tel"
-          inputMode="numeric"
-          placeholder="(19) 99955-1747"
-          value={whatsappContador}
-          onChange={(e) => setWhatsappContador(maskPhone(e.target.value))}
-        />
-
-        <hr className="my-1 border-gray-100" />
-
-        <div>
-          <label className="label-field" htmlFor="senha">
-            Crie uma senha
-          </label>
-          <div className="relative">
-            <input
-              id="senha"
-              name="senha"
-              type={verSenha ? "text" : "password"}
-              className="input-field pr-16"
-              placeholder="mínimo 6 caracteres"
-              autoComplete="new-password"
-              required
-            />
-            <button
-              type="button"
-              onClick={() => setVerSenha((v) => !v)}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-sm font-semibold text-primary"
-            >
-              {verSenha ? "ocultar" : "mostrar"}
-            </button>
+        {state.error && (
+          <div className="mt-5 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-700">
+            {state.error}
           </div>
-        </div>
+        )}
 
-        <BotaoEnviar />
-      </form>
+        <form action={formAction} className="mt-6 flex flex-col gap-4">
+          <Campo label="Seu nome" name="nome" placeholder="Maria da Silva" required />
+
+          <Campo
+            label="E-mail (para entrar)"
+            name="email"
+            type="email"
+            placeholder="voce@email.com"
+            autoComplete="email"
+            required
+          />
+
+          <Campo
+            label="CPF"
+            name="cpf"
+            placeholder="000.000.000-00"
+            inputMode="numeric"
+            required
+          />
+
+          <Campo
+            label="Seu WhatsApp"
+            name="whatsapp"
+            type="tel"
+            inputMode="numeric"
+            placeholder="(19) 99955-1747"
+            value={whatsapp}
+            onChange={(e) => setWhatsapp(maskPhone(e.target.value))}
+          />
+
+          <div>
+            <label className="label-field" htmlFor="tipo_mei">
+              Tipo de MEI
+            </label>
+            <select
+              id="tipo_mei"
+              name="tipo_mei"
+              className="input-field"
+              defaultValue="mei"
+              required
+            >
+              {TIPOS_MEI.map((t) => (
+                <option key={t.value} value={t.value}>
+                  {t.label} — limite {formatBRL(t.limite)}/ano
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div>
+            <label className="label-field" htmlFor="tipo_atividade">
+              Tipo de atividade
+            </label>
+            <select
+              id="tipo_atividade"
+              name="tipo_atividade"
+              className="input-field"
+              defaultValue=""
+              required
+            >
+              <option value="" disabled>
+                Escolha...
+              </option>
+              {TIPOS_ATIVIDADE.map((t) => (
+                <option key={t.value} value={t.value}>
+                  {t.label}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <hr className="my-1 border-gray-100" />
+          <p className="text-sm font-semibold text-gray-700">Seu contador</p>
+
+          <Campo
+            label="Nome do contador"
+            name="nome_contador"
+            placeholder="Nome do escritório ou pessoa"
+          />
+
+          <Campo
+            label="WhatsApp do contador"
+            name="whatsapp_contador"
+            type="tel"
+            inputMode="numeric"
+            placeholder="(19) 99955-1747"
+            value={whatsappContador}
+            onChange={(e) => setWhatsappContador(maskPhone(e.target.value))}
+          />
+
+          <hr className="my-1 border-gray-100" />
+
+          <div>
+            <label className="label-field" htmlFor="senha">
+              Crie uma senha
+            </label>
+            <div className="relative">
+              <input
+                id="senha"
+                name="senha"
+                type={verSenha ? "text" : "password"}
+                className="input-field pr-16"
+                placeholder="mínimo 6 caracteres"
+                autoComplete="new-password"
+                required
+              />
+              <button
+                type="button"
+                onClick={() => setVerSenha((v) => !v)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-sm font-semibold text-primary"
+              >
+                {verSenha ? "ocultar" : "mostrar"}
+              </button>
+            </div>
+          </div>
+
+          <BotaoEnviar />
+        </form>
+      </div>
 
       <p className="mt-6 text-center text-sm text-gray-600">
         Já tem conta?{" "}

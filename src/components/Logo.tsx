@@ -1,40 +1,33 @@
-interface LogoProps {
-  /** Tamanho do quadro "H9". */
-  size?: "sm" | "md" | "lg";
-  /** Mostrar o texto "MEI no Limite" ao lado. */
-  withText?: boolean;
-  /** Variante de cor do texto (para fundos escuros). */
-  light?: boolean;
-}
+import Image from "next/image";
 
-const sizes = {
-  sm: { box: "h-8 w-8 text-sm rounded-lg", text: "text-base" },
-  md: { box: "h-10 w-10 text-base rounded-xl", text: "text-lg" },
-  lg: { box: "h-12 w-12 text-lg rounded-xl", text: "text-xl" },
-};
-
+/**
+ * Logo horizontal da marca (símbolo + "MEI no Limite").
+ *  - variant "light": para fundos claros (texto escuro)
+ *  - variant "dark":  para fundos escuros (texto claro)
+ * Use className para controlar o tamanho (ex.: "h-8 w-auto").
+ * SVG servido com unoptimized (o otimizador do Next não processa SVG).
+ */
 export default function Logo({
-  size = "md",
-  withText = true,
-  light = false,
-}: LogoProps) {
-  const s = sizes[size];
+  variant = "light",
+  className = "h-8 w-auto",
+}: {
+  variant?: "light" | "dark";
+  className?: string;
+}) {
+  const src =
+    variant === "dark"
+      ? "/logo/horizontal-dark.svg"
+      : "/logo/horizontal-light.svg";
+
   return (
-    <div className="flex items-center gap-2.5">
-      <div
-        className={`flex items-center justify-center bg-primary font-extrabold tracking-tight text-white ${s.box}`}
-      >
-        H9
-      </div>
-      {withText && (
-        <span
-          className={`font-bold ${s.text} ${
-            light ? "text-white" : "text-primary"
-          }`}
-        >
-          MEI no Limite
-        </span>
-      )}
-    </div>
+    <Image
+      src={src}
+      alt="MEI no Limite"
+      width={1024}
+      height={463}
+      priority
+      unoptimized
+      className={className}
+    />
   );
 }

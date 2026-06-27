@@ -8,7 +8,7 @@ export default function LandingPage() {
     <main className="flex min-h-screen flex-col">
       {/* Topo */}
       <header className="mx-auto flex w-full max-w-5xl items-center justify-between px-5 py-5">
-        <Logo size="md" />
+        <Logo className="h-8 w-auto" />
         <Link
           href="/login"
           className="text-sm font-semibold text-primary hover:underline"

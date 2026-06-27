@@ -71,7 +71,7 @@ export default async function RelatorioPublicoPage({
       <div className="mx-auto w-full max-w-2xl px-5">
         {/* Cabeçalho */}
         <div className="rounded-t-2xl bg-primary px-6 py-6 text-white">
-          <Logo size="md" withText light />
+          <Logo variant="dark" className="h-9 w-auto" />
           <h1 className="mt-4 text-2xl font-extrabold">
             Relatório de Faturamento
           </h1>

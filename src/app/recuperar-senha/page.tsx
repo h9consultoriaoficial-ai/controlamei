@@ -40,7 +40,7 @@ export default function RecuperarSenhaPage() {
   return (
     <main className="mx-auto flex min-h-screen w-full max-w-md flex-col justify-center px-5 py-8">
       <Link href="/" className="mb-8 self-start">
-        <Logo size="md" />
+        <Logo className="h-8 w-auto" />
       </Link>
 
       {enviado ? (
