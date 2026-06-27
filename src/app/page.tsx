@@ -1,8 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
-import FAQ from "@/components/FAQ";
 
-// Marketing: número de vagas restantes (ajuste à vontade).
+// Marketing: número de vagas restantes (ajuste à vontade / tornar dinâmico depois).
 const VAGAS_RESTANTES = 37;
 
 export default function LandingPage() {
@@ -16,465 +15,555 @@ export default function LandingPage() {
   );
 
   return (
-    <div className="min-h-screen bg-[#0A0E0C] text-[#F4F4F6]">
+    <div className="lp">
       {/* ===================== HERO ===================== */}
-      <section className="mx-auto flex w-full max-w-2xl flex-col items-center px-5 pb-16 pt-10 text-center">
-        <Image
-          src="/logo/horizontal-dark.svg"
-          alt="MEI no Limite"
-          width={1024}
-          height={463}
-          priority
-          unoptimized
-          className="h-10 w-auto"
-        />
-
-        <span className="mt-10 inline-flex items-center gap-2 rounded-full border border-[#FF5C5C]/30 bg-[#FF5C5C]/10 px-4 py-1.5 text-sm font-semibold text-[#FF5C5C]">
-          🔴 {VAGAS_RESTANTES} de 300 vagas de Fundador restantes
-        </span>
-
-        <h1 className="mt-6 text-3xl font-extrabold leading-tight tracking-tight sm:text-4xl">
-          Você pode já ter{" "}
-          <span className="hl-red">estourado o limite do MEI</span> e nem saber.
-        </h1>
-
-        <p className="mt-5 max-w-xl text-lg text-[#A0A0B0]">
-          O MEI no Limite avisa quando você está perto do limite de R$ 81.000 —
-          antes de ser tarde demais.
-        </p>
-
-        <div className="mt-8 flex items-baseline justify-center gap-3">
-          <span className="text-lg text-[#A0A0B0] line-through">
-            R$ 87,90/mês
-          </span>
-          <span className="text-4xl font-extrabold text-[#39D98A]">
-            R$ 27,90<span className="text-xl font-bold">/mês</span>
-          </span>
-        </div>
-        <p className="mt-2 text-sm text-[#A0A0B0]">
-          Plano anual R$ 334,80 · R$ 0,93/dia · menos que um café
-        </p>
-
-        <Link href="/cadastro" className="btn-lp mt-8 w-full sm:w-auto">
-          Quero saber meu número agora →
-        </Link>
-
-        <div className="mt-6 flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-sm text-[#A0A0B0]">
-          <span>✓ Garantia 30 dias</span>
-          <span>✓ Sem fidelidade</span>
-          <span>✓ PWA sem instalar</span>
+      <section className="lp-hero lp-sec">
+        <div className="lp-wrap">
+          <Image
+            src="/logo/horizontal-dark.svg"
+            alt="MEI no Limite"
+            width={1024}
+            height={463}
+            priority
+            unoptimized
+            className="h-9 w-auto"
+          />
+          <div className="lp-hero-grid" style={{ marginTop: 26 }}>
+            <div>
+              <span className="lp-pill">
+                <span className="lp-dotpulse" /> Acesso Fundador · restam{" "}
+                {VAGAS_RESTANTES} de 300 vagas
+              </span>
+              <h1>
+                Você pode já ter{" "}
+                <span className="hl-red">estourado o limite do MEI</span> e nem
+                saber.
+              </h1>
+              <p className="lp-sub">
+                Descubra em 2 minutos, no seu celular, quanto ainda pode vender
+                este ano — antes do contador ligar com uma multa de R$ 15.000.
+              </p>
+              <ul>
+                <li>
+                  <span className="lp-check">✓</span>{" "}
+                  <b>Saiba o seu número em 2 minutos:</b> veja, em reais, quanto
+                  ainda pode vender sem virar empresa. Sem somar de cabeça, sem
+                  planilha.
+                </li>
+                <li>
+                  <span className="lp-check">✓</span>{" "}
+                  <b>Seja avisada ANTES, não depois:</b> o amarelo acende
+                  enquanto ainda dá pra frear.
+                </li>
+                <li>
+                  <span className="lp-check">✓</span>{" "}
+                  <b>Zero imposto pra entender:</b> você só olha a cor. O sistema
+                  sabe o seu limite (R$ 81.000) e aplica a regra sozinho.
+                </li>
+              </ul>
+              <Link href="/cadastro" className="lp-btn lp-btn-lg">
+                Quero saber meu número agora
+              </Link>
+              <p className="lp-micro">
+                R$ 0,93 por dia. Menos que um café. Garantia de 30 dias.
+              </p>
+            </div>
+            <div>
+              <div className="lp-mock" aria-hidden="true">
+                <div className="lp-farol">
+                  <span className="lp-luz lp-vermelho" />
+                  <span className="lp-luz lp-amarelo on" />
+                  <span className="lp-luz lp-verde" />
+                </div>
+                <div className="lp-saldo">
+                  <div className="lbl">Você ainda pode vender</div>
+                  <div className="val">R$ 23.400</div>
+                  <div className="lp-barra">
+                    <i />
+                  </div>
+                  <div className="lbl" style={{ marginTop: 8 }}>
+                    64% do limite de R$ 81.000 usado
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
       {/* ===================== DOR ===================== */}
-      <section className="bg-[#0E1310] px-5 py-16">
-        <div className="mx-auto w-full max-w-3xl">
-          <h2 className="text-center text-2xl font-extrabold sm:text-3xl">
-            Isso já aconteceu com você?
+      <section className="lp-sec">
+        <div className="lp-wrap">
+          <div className="lp-eyebrow">A verdade que ninguém te conta</div>
+          <h2 className="lp-title">
+            Sinceramente: você sabe quanto já faturou esse ano?
           </h2>
-          <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-3">
-            {[
-              "Não sei quanto já vendi esse ano",
-              "Tenho medo de estourar o limite sem perceber",
-              "Só descubro o problema quando o contador liga",
-            ].map((txt) => (
-              <div
-                key={txt}
-                className="rounded-2xl border border-[#FF5C5C]/20 bg-[#FF5C5C]/[0.06] p-5"
-              >
-                <span className="text-2xl">😰</span>
-                <p className="mt-2 font-semibold text-[#F4F4F6]">{txt}</p>
-              </div>
-            ))}
-          </div>
+          <p className="lp-lead">
+            Quase nenhum MEI sabe. As vendas são pequenas, pulverizadas, e
+            ninguém soma. Aí vira o ano, o contador liga, e vem a frase que
+            ninguém quer ouvir: &quot;você passou do limite.&quot; Quando você
+            descobre, já é tarde — o estrago é retroativo a janeiro.
+          </p>
+          <p
+            style={{
+              fontSize: 22,
+              fontWeight: 800,
+              color: "#fff",
+              marginTop: 22,
+              maxWidth: 680,
+            }}
+          >
+            O problema não é faturar muito. É não contar. E quase ninguém conta.
+          </p>
         </div>
       </section>
 
-      {/* ===================== SEMÁFORO ===================== */}
-      <section className="px-5 py-16">
-        <div className="mx-auto w-full max-w-3xl">
-          <h2 className="text-center text-2xl font-extrabold sm:text-3xl">
-            Simples assim — igual um semáforo
-          </h2>
-          <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-3">
-            <Passo
-              cor="#39D98A"
-              emoji="🟢"
-              titulo="Verde"
-              texto="Pode vender à vontade."
-            />
-            <Passo
-              cor="#FFC53D"
-              emoji="🟡"
-              titulo="Amarelo"
-              texto="Atenção, está chegando perto."
-            />
-            <Passo
-              cor="#FF5C5C"
-              emoji="🔴"
-              titulo="Vermelho"
-              texto="Pare e fale com seu contador."
-            />
+      {/* ===================== CUSTO ===================== */}
+      <section className="lp-custo lp-sec">
+        <div className="lp-wrap">
+          <div className="lp-eyebrow" style={{ color: "#DC2626" }}>
+            O custo de descobrir tarde demais
           </div>
+          <h2 className="lp-title">
+            Ultrapassar em mais de 20% te desenquadra retroativo a janeiro
+          </h2>
+          <p className="lp-lead">
+            Você passa a ser cobrada como empresa o ano inteiro:
+          </p>
+          <ul>
+            <li>
+              Imposto recalculado como ME (retroativo) <b>+++</b>
+            </li>
+            <li>
+              DAS e tributos retroativos <b>++</b>
+            </li>
+            <li>
+              Multas e juros <b>++</b>
+            </li>
+            <li>
+              Custo contábil de empresa <b>+</b>
+            </li>
+          </ul>
+          <div className="lp-bignum">+ R$ 15.000</div>
+          <p className="lp-lead">
+            De uma vez. Sem aviso. O MEI no Limite custa{" "}
+            <b style={{ color: "#fff" }}>R$ 334,80 no ano inteiro</b> — 2% do
+            tamanho do buraco que ele tampa.
+          </p>
+        </div>
+      </section>
+
+      {/* ===================== MECANISMO ===================== */}
+      <section className="lp-sec lp-center">
+        <div className="lp-wrap">
+          <div className="lp-eyebrow">A virada</div>
+          <h2 className="lp-title">
+            Conheça o Semáforo do MEI{" "}
+            <span className="lp-semaforo">
+              <span className="lp-s-g" />
+              <span className="lp-s-a" />
+              <span className="lp-s-r" />
+            </span>
+          </h2>
+          <p className="lp-lead">
+            Você não precisa aprender contabilidade. Você precisa de uma cor. O
+            MEI no Limite transforma todas as suas vendas num semáforo que
+            qualquer um entende:
+          </p>
+          <div className="lp-cards lp-c3">
+            <div className="lp-card lp-farolcard g">
+              <h3>🟢 Verde</h3>
+              <p>Pode vender à vontade.</p>
+            </div>
+            <div className="lp-card lp-farolcard a">
+              <h3>🟡 Amarelo</h3>
+              <p>
+                Atenção, está chegando perto.{" "}
+                <b style={{ color: "#F59E0B" }}>
+                  É aqui que está o pulo do gato: você é avisada ANTES.
+                </b>
+              </p>
+            </div>
+            <div className="lp-card lp-farolcard r">
+              <h3>🔴 Vermelho</h3>
+              <p>Pare, você está no limite.</p>
+            </div>
+          </div>
+          <p className="lp-lead" style={{ marginTop: 26 }}>
+            O amarelo é o que planilha, caderno e contador nunca te deram: um
+            aviso antecipado, enquanto ainda dá tempo de agir.
+          </p>
+        </div>
+      </section>
+
+      {/* ===================== COMO FUNCIONA ===================== */}
+      <section className="lp-alt lp-sec">
+        <div className="lp-wrap">
+          <div className="lp-eyebrow">Como funciona</div>
+          <h2 className="lp-title">
+            Simples assim. Feito pra quem não entende de imposto nem de app.
+          </h2>
+          <div style={{ marginTop: 28 }}>
+            <div className="lp-passo">
+              <div className="n">1</div>
+              <div>
+                <h3>Lance em 3 toques</h3>
+                <p style={{ color: "#475569" }}>
+                  Registre suas vendas no celular — ou responda 1 pergunta e veja
+                  sua cor na hora, sem lançar nada.
+                </p>
+              </div>
+            </div>
+            <div className="lp-passo">
+              <div className="n">2</div>
+              <div>
+                <h3>Veja seu saldo do ano</h3>
+                <p style={{ color: "#475569" }}>
+                  &quot;Você ainda pode vender R$ X este ano.&quot;
+                </p>
+              </div>
+            </div>
+            <div className="lp-passo">
+              <div className="n">3</div>
+              <div>
+                <h3>Receba o alerta amarelo</h3>
+                <p style={{ color: "#475569" }}>
+                  Seja avisada antes de chegar no limite e mande o relatório pro
+                  contador com um toque.
+                </p>
+              </div>
+            </div>
+          </div>
+          <p className="lp-lead" style={{ marginTop: 10 }}>
+            <b>
+              Tudo no navegador do celular. Sem instalar nada. Se você usa
+              WhatsApp, você usa isso.
+            </b>
+          </p>
         </div>
       </section>
 
       {/* ===================== VEJA O APP POR DENTRO ===================== */}
-      <section className="px-5 py-16">
-        <div className="mx-auto w-full max-w-4xl">
-          <p className="text-center text-sm font-semibold uppercase tracking-widest text-[#FFC53D]">
-            Veja o app por dentro
-          </p>
-          <h2 className="mt-2 text-center text-2xl font-extrabold sm:text-3xl">
-            É isso que você abre no celular
-          </h2>
-          <p className="mx-auto mt-3 max-w-xl text-center text-[#A0A0B0]">
+      <section className="lp-dark2 lp-sec lp-center">
+        <div className="lp-wrap">
+          <div className="lp-eyebrow">Veja o app por dentro</div>
+          <h2 className="lp-title">É isso que você abre no celular</h2>
+          <p className="lp-lead">
             Sem telas complicadas. Você olha a cor, vê quanto ainda pode vender e
             manda pro contador.
           </p>
-
-          <div className="mt-10 flex flex-wrap items-start justify-center gap-7">
+          <div className="lp-phones">
             {/* Tela 1 — Semáforo */}
-            <div className="flex flex-col items-center">
-              <div className="w-[230px] rounded-[34px] border-8 border-white/10 bg-[#0A0E0C] p-3 shadow-2xl">
-                <div className="min-h-[400px] rounded-[22px] bg-[#F1F5F9] p-3.5 text-[#0B1120]">
-                  <p className="pb-3 text-[13px] font-extrabold">MEI no Limite</p>
-                  <div className="flex items-center gap-3 rounded-2xl bg-[#FEF3C7] p-3">
-                    <div className="flex flex-col gap-1.5 rounded-xl bg-gray-900 p-1.5">
-                      <span className="h-4 w-4 rounded-full bg-[#FF5C5C] opacity-20" />
-                      <span className="h-4 w-4 rounded-full bg-[#FFC53D] shadow-[0_0_10px_#FFC53D]" />
-                      <span className="h-4 w-4 rounded-full bg-[#39D98A] opacity-20" />
+            <div>
+              <div className="lp-phone">
+                <div className="lp-screen">
+                  <p className="lp-appbar">MEI no Limite</p>
+                  <div className="lp-sfcard">
+                    <div className="lp-sflights">
+                      <span className="r" />
+                      <span className="a on" />
+                      <span className="g" />
                     </div>
                     <div>
-                      <p className="text-[11px] font-extrabold uppercase text-[#B45309]">
-                        Atenção!
-                      </p>
-                      <p className="text-[30px] font-extrabold leading-none">78%</p>
-                      <p className="text-[11px] text-[#64748B]">
-                        do limite anual usado
-                      </p>
+                      <p className="lp-sftt">Atenção!</p>
+                      <p className="lp-sfpct">78%</p>
+                      <p className="lp-sfsub">do limite anual usado</p>
                     </div>
                   </div>
-                  <div className="mt-3 rounded-xl border border-[#A7F3D0] bg-[#ECFDF5] p-3 text-center text-[12px] text-[#065F46]">
-                    Você ainda pode vender
-                    <span className="mt-1 block text-[22px] font-extrabold text-[#16A34A]">
-                      R$ 17.820
-                    </span>
+                  <div className="lp-sfsaldo">
+                    Você ainda pode vender<b>R$ 17.820</b>
                   </div>
-                  <div className="mt-3 flex justify-between border-b border-dashed border-gray-200 py-2 text-[12px]">
-                    <span className="text-[#94A3B8]">Limite anual</span>
+                  <div className="lp-fld" style={{ marginTop: 12 }}>
+                    <span className="k">Limite anual</span>
                     <span>R$ 81.000</span>
                   </div>
-                  <div className="flex justify-between py-2 text-[12px]">
-                    <span className="text-[#94A3B8]">Já faturado</span>
+                  <div className="lp-fld">
+                    <span className="k">Já faturado</span>
                     <span>R$ 63.180</span>
                   </div>
                 </div>
               </div>
-              <p className="mt-3 text-sm font-semibold text-[#A0A0B0]">
-                🚦 Seu semáforo
-              </p>
+              <p className="lp-shotcap">🚦 Seu semáforo</p>
             </div>
 
             {/* Tela 2 — Lançar */}
-            <div className="flex flex-col items-center">
-              <div className="w-[230px] rounded-[34px] border-8 border-white/10 bg-[#0A0E0C] p-3 shadow-2xl">
-                <div className="min-h-[400px] rounded-[22px] bg-[#F1F5F9] p-3.5 text-[#0B1120]">
-                  <p className="pb-3 text-[13px] font-extrabold">Nova venda</p>
-                  <p className="mb-2 text-[13px] font-extrabold">Lançar receita</p>
-                  <div className="mb-2 flex justify-between rounded-lg border border-gray-200 bg-white px-3 py-2 text-[12px]">
-                    <span className="text-[#94A3B8]">Valor</span>
-                    <span className="font-bold">R$ 250,00</span>
+            <div>
+              <div className="lp-phone">
+                <div className="lp-screen">
+                  <p className="lp-appbar">Nova venda</p>
+                  <p className="lp-pttl">Lançar receita</p>
+                  <div className="lp-fld">
+                    <span className="k">Valor</span>
+                    <span>
+                      <b>R$ 250,00</b>
+                    </span>
                   </div>
-                  <div className="mb-3 flex justify-between rounded-lg border border-gray-200 bg-white px-3 py-2 text-[12px]">
-                    <span className="text-[#94A3B8]">Data</span>
+                  <div className="lp-fld">
+                    <span className="k">Data</span>
                     <span>27/06/2026</span>
                   </div>
-                  <p className="mb-1.5 text-[11px] text-[#94A3B8]">
+                  <p
+                    className="lp-pttl"
+                    style={{ fontSize: 11, color: "#94A3B8", margin: "4px 0 6px" }}
+                  >
                     Forma de pagamento
                   </p>
-                  <div className="mb-3 flex flex-wrap gap-1.5">
-                    <span className="rounded-full bg-[#16A34A] px-2.5 py-1 text-[11px] font-semibold text-white">
-                      PIX
-                    </span>
-                    <span className="rounded-full border border-gray-200 px-2.5 py-1 text-[11px] text-[#475569]">
-                      Dinheiro
-                    </span>
-                    <span className="rounded-full border border-gray-200 px-2.5 py-1 text-[11px] text-[#475569]">
-                      Cartão
-                    </span>
+                  <div className="lp-chips">
+                    <span className="sel">PIX</span>
+                    <span>Dinheiro</span>
+                    <span>Cartão</span>
                   </div>
-                  <div className="rounded-lg bg-[#16A34A] py-2.5 text-center text-[13px] font-extrabold text-white">
-                    Salvar lançamento
-                  </div>
+                  <div className="lp-appbtn">Salvar lançamento</div>
                 </div>
               </div>
-              <p className="mt-3 text-sm font-semibold text-[#A0A0B0]">
-                ✍️ Lançar em 3 toques
-              </p>
+              <p className="lp-shotcap">✍️ Lançar em 3 toques</p>
             </div>
 
             {/* Tela 3 — Relatório */}
-            <div className="flex flex-col items-center">
-              <div className="w-[230px] rounded-[34px] border-8 border-white/10 bg-[#0A0E0C] p-3 shadow-2xl">
-                <div className="min-h-[400px] rounded-[22px] bg-[#F1F5F9] p-3.5 text-[#0B1120]">
-                  <p className="pb-3 text-[13px] font-extrabold">Relatório</p>
-                  <p className="mb-2 text-[13px] font-extrabold">
-                    Resumo do ano · 2026
-                  </p>
-                  <div className="flex justify-between border-b border-dashed border-gray-200 py-2 text-[12px]">
+            <div>
+              <div className="lp-phone">
+                <div className="lp-screen">
+                  <p className="lp-appbar">Relatório</p>
+                  <p className="lp-pttl">Resumo do ano · 2026</p>
+                  <div className="lp-prow">
                     <span>Receitas</span>
-                    <span className="font-bold text-[#16A34A]">R$ 63.180</span>
+                    <b className="g">R$ 63.180</b>
                   </div>
-                  <div className="flex justify-between border-b border-dashed border-gray-200 py-2 text-[12px]">
+                  <div className="lp-prow">
                     <span>Despesas</span>
-                    <span className="font-bold text-[#DC2626]">R$ 11.430</span>
+                    <b className="r">R$ 11.430</b>
                   </div>
-                  <div className="flex justify-between border-b border-dashed border-gray-200 py-2 text-[12px]">
+                  <div className="lp-prow">
                     <span>Saldo líquido</span>
-                    <span className="font-bold">R$ 51.750</span>
+                    <b>R$ 51.750</b>
                   </div>
-                  <div className="flex justify-between py-2 text-[12px]">
+                  <div className="lp-prow">
                     <span>% do limite</span>
-                    <span className="font-bold">78%</span>
+                    <b>78%</b>
                   </div>
-                  <div className="mt-3 rounded-lg bg-[#25D366] py-2.5 text-center text-[13px] font-extrabold text-white">
+                  <div className="lp-appbtn wa" style={{ marginTop: 14 }}>
                     Enviar pro contador
                   </div>
-                  <p className="mt-2 text-center text-[11px] text-[#64748B]">
+                  <p className="lp-sfsub" style={{ textAlign: "center", marginTop: 8 }}>
                     Link abre sem login
                   </p>
                 </div>
               </div>
-              <p className="mt-3 text-sm font-semibold text-[#A0A0B0]">
-                📄 Relatório num toque
-              </p>
+              <p className="lp-shotcap">📄 Relatório num toque</p>
             </div>
           </div>
         </div>
       </section>
 
       {/* ===================== EQUAÇÃO DE VALOR ===================== */}
-      <section className="px-5 py-16">
-        <div className="mx-auto w-full max-w-4xl">
-          <h2 className="text-center text-2xl font-extrabold sm:text-3xl">
-            Por que funciona pra você
-          </h2>
-          <p className="mx-auto mt-3 max-w-xl text-center text-[#A0A0B0]">
-            Mesmo se você &quot;não é boa de tecnologia&quot;.
+      <section className="lp-sec lp-center">
+        <div className="lp-wrap">
+          <div className="lp-eyebrow">Por que funciona pra você</div>
+          <h2 className="lp-title">Mesmo se você &quot;não é boa de tecnologia&quot;</h2>
+          <div className="lp-cards lp-c4">
+            <div className="lp-card">
+              <h3>🎯 Resultado</h3>
+              <p>Dormir tranquila, nunca mais ser pega de surpresa.</p>
+            </div>
+            <div className="lp-card">
+              <h3>✅ Confiança</h3>
+              <p>À prova de leigo + regra automática + garantia de 30 dias.</p>
+            </div>
+            <div className="lp-card">
+              <h3>⚡ Rapidez</h3>
+              <p>Sua primeira cor em 2 minutos.</p>
+            </div>
+            <div className="lp-card">
+              <h3>🪶 Esforço</h3>
+              <p>3 toques. Sem instalar. Sem imposto pra entender.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ===================== O QUE VOCÊ RECEBE (BÔNUS) ===================== */}
+      <section className="lp-dark2 lp-sec">
+        <div className="lp-wrap">
+          <div className="lp-eyebrow">Tudo que entra no seu Acesso Fundador</div>
+          <h2 className="lp-title">O app completo + 7 bônus</h2>
+          <p className="lp-lead">
+            O app MEI no Limite completo (Semáforo, saldo do ano, alerta amarelo,
+            relatório pro contador) — mais:
           </p>
-          <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="lp-cards lp-c2" style={{ marginTop: 24 }}>
             {[
-              { e: "🎯", t: "Resultado", d: "Dormir tranquila, nunca mais ser pega de surpresa." },
-              { e: "✅", t: "Confiança", d: "À prova de leigo + regra automática + garantia de 30 dias." },
-              { e: "⚡", t: "Rapidez", d: "Sua primeira cor em 2 minutos." },
-              { e: "🪶", t: "Esforço", d: "3 toques. Sem instalar. Sem imposto pra entender." },
-            ].map((c) => (
-              <div
-                key={c.t}
-                className="rounded-2xl border border-white/10 bg-white/[0.04] p-5 text-center"
-              >
-                <div className="text-3xl">{c.e}</div>
-                <h3 className="mt-2 font-extrabold text-[#F4F4F6]">{c.t}</h3>
-                <p className="mt-1 text-sm text-[#A0A0B0]">{c.d}</p>
+              { t: "🎁 Raio-X do Seu Ano", v: "R$ 297", d: "Projeção de onde você fecha dezembro." },
+              { t: "🎁 Pasta do Contador Pronta", v: "R$ 397", d: "Relatório done-for-you, num toque." },
+              { t: "🎁 Lembrete que Não Deixa Esquecer", v: "R$ 247", d: "Alerta diário no WhatsApp." },
+              { t: "🎁 Destravada em 3 Minutos", v: "R$ 197", d: "Mini-treino sem imposto." },
+              { t: "🎁 Guia dos 3 Meses que Mais Derrubam MEI", v: "R$ 197", d: "Mães, Black Friday, Natal." },
+              { t: "🎁 Veja Antes de Confiar", v: "R$ 297", d: "Demo + seu número antes de pagar." },
+              { t: "🎁 Acesso Fundador Vitalício", v: "R$ 215", d: "Preço travado pra sempre." },
+            ].map((b) => (
+              <div className="lp-card" key={b.t}>
+                <h3>
+                  {b.t}{" "}
+                  <span style={{ color: "#94A3B8", fontWeight: 400 }}>({b.v})</span>
+                </h3>
+                <p>{b.d}</p>
               </div>
             ))}
           </div>
-        </div>
-      </section>
-
-      {/* ===================== O QUE ESTÁ INCLUSO ===================== */}
-      <section className="bg-[#0E1310] px-5 py-16">
-        <div className="mx-auto w-full max-w-xl">
-          <h2 className="text-center text-2xl font-extrabold sm:text-3xl">
-            Tudo que você leva hoje
-          </h2>
-          <ul className="mt-8 flex flex-col gap-3">
-            {[
-              "Semáforo do limite em tempo real",
-              "Lançamento de receitas e despesas",
-              "Categorias de despesa (aluguel, estoque, frete...)",
-              "Relatório mês a mês para o contador",
-              "Envio pro contador via WhatsApp em 1 toque",
-              "Funciona no celular sem instalar (PWA)",
-              "MEI Padrão (R$ 81.000) e Caminhoneiro (R$ 251.600)",
-              "Histórico com gráfico anual",
-              "Dados seguros e isolados",
-            ].map((item) => (
-              <li key={item} className="flex items-start gap-3">
-                <span className="mt-0.5 shrink-0 text-lg font-bold text-[#39D98A]">
-                  ✓
-                </span>
-                <span className="text-[#F4F4F6]">{item}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </section>
-
-      {/* ===================== BÔNUS ===================== */}
-      <section className="bg-[#0E1310] px-5 py-16">
-        <div className="mx-auto w-full max-w-2xl">
-          <h2 className="text-center text-2xl font-extrabold sm:text-3xl">
-            E ainda leva 7 bônus
-          </h2>
-          <p className="mx-auto mt-3 max-w-xl text-center text-[#A0A0B0]">
-            Tudo dentro dos R$ 27,90/mês.
-          </p>
-          <ul className="mt-8 flex flex-col gap-3">
-            {[
-              { n: "Raio-X do Seu Ano — projeção de onde você fecha dezembro", v: "R$ 297" },
-              { n: "Pasta do Contador Pronta — relatório num toque", v: "R$ 397" },
-              { n: "Lembrete que não deixa esquecer — alerta diário no WhatsApp", v: "R$ 247" },
-              { n: "Destravada em 3 Minutos — mini-treino sem imposto", v: "R$ 197" },
-              { n: "Guia dos 3 Meses que mais derrubam MEI", v: "R$ 197" },
-              { n: "Veja Antes de Confiar — demo + seu número antes de pagar", v: "R$ 297" },
-              { n: "Acesso Fundador Vitalício — preço travado pra sempre", v: "R$ 215" },
-            ].map((b) => (
-              <li
-                key={b.n}
-                className="flex items-center justify-between gap-3 rounded-2xl border border-white/10 bg-white/[0.04] p-4"
-              >
-                <span className="flex items-start gap-3">
-                  <span className="mt-0.5 shrink-0 text-lg">🎁</span>
-                  <span className="text-[#F4F4F6]">{b.n}</span>
-                </span>
-                <span className="shrink-0 text-sm font-bold text-[#A0A0B0] line-through">
-                  {b.v}
-                </span>
-              </li>
-            ))}
-          </ul>
-          <p className="mt-6 text-center text-lg font-extrabold text-[#F4F4F6]">
-            Valor total dos bônus:{" "}
-            <span className="text-[#39D98A]">R$ 1.847</span>
+          <p
+            className="lp-lead"
+            style={{ marginTop: 22, fontSize: 20, color: "#fff" }}
+          >
+            <b>Valor total dos bônus: R$ 1.847.</b> Tudo dentro dos R$ 27,90/mês.
           </p>
         </div>
       </section>
 
-      {/* ===================== ANCORAGEM DE PREÇO ===================== */}
-      <section className="px-5 py-16">
-        <div className="mx-auto w-full max-w-xl text-center">
-          <div className="rounded-2xl border border-[#FF5C5C]/20 bg-[#FF5C5C]/[0.06] p-5">
-            <p className="text-sm font-semibold uppercase tracking-wide text-[#FF5C5C]">
-              O problema custa
-            </p>
-            <p className="mt-1 text-3xl font-extrabold text-[#FF5C5C]">
-              R$ 15.000
-            </p>
-            <p className="mt-1 text-sm text-[#A0A0B0]">
-              em impostos retroativos se você estourar o limite sem perceber.
-            </p>
+      {/* ===================== PREÇO ===================== */}
+      <section className="lp-preco lp-sec lp-center" id="preco">
+        <div className="lp-wrap">
+          <div className="lp-eyebrow">Quanto vale nunca mais ser pega de surpresa?</div>
+          <h2 className="lp-title">O preço de Fundador</h2>
+          <div className="lp-cascata">
+            <div className="lp-casc red">
+              <span className="k">O prejuízo que você evita</span>
+              <span className="v">R$ 15.000</span>
+            </div>
+            <div className="lp-casc del">
+              <span className="k">Só em bônus</span>
+              <span className="v">R$ 1.847</span>
+            </div>
+            <div className="lp-casc del">
+              <span className="k">Preço cheio</span>
+              <span className="v">R$ 87,90/mês</span>
+            </div>
+            <div className="lp-casc win">
+              <span className="k">Seu preço de Fundador</span>
+              <span className="v">R$ 27,90/mês</span>
+            </div>
           </div>
-
-          <div className="mt-4 flex items-center justify-center gap-3 text-[#A0A0B0]">
-            <span>Só em bônus:</span>
-            <span className="text-xl font-bold line-through">R$ 1.847</span>
-          </div>
-
-          <div className="mt-2 flex items-center justify-center gap-3 text-[#A0A0B0]">
-            <span>Preço cheio:</span>
-            <span className="text-xl font-bold line-through">R$ 87,90/mês</span>
-          </div>
-
-          <div className="mt-4 rounded-2xl border-2 border-[#39D98A] bg-[#39D98A]/[0.08] p-6">
-            <p className="text-sm font-semibold uppercase tracking-wide text-[#39D98A]">
-              Preço de Fundador
+          <div className="lp-precobox">
+            <p className="lp-lead" style={{ margin: "0 auto" }}>
+              Plano anual de R$ 334,80 à vista no cartão (ou 12x de R$ 27,90).
             </p>
-            <p className="mt-1 text-5xl font-extrabold text-[#39D98A]">
-              R$ 27,90
-              <span className="text-2xl font-bold">/mês</span>
-            </p>
-            <p className="mt-2 text-[#F4F4F6]">
-              = R$ 0,93/dia · menos que um café
-            </p>
+            <p className="dia">= R$ 0,93 por dia. Menos que um café.</p>
+            <Link href="/cadastro" className="lp-btn lp-btn-lg" style={{ marginTop: 12 }}>
+              Garantir meu acesso de fundador
+            </Link>
           </div>
-
-          <Link href="/cadastro" className="btn-lp mt-6 w-full">
-            Garantir meu acesso de Fundador
-          </Link>
-          <p className="mt-3 text-sm text-[#A0A0B0]">
-            Plano anual · R$ 334,80 à vista · Trava de preço vitalícia para os
-            300 primeiros
-          </p>
-        </div>
-      </section>
-
-      {/* ===================== OBJEÇÕES (FAQ) ===================== */}
-      <section className="bg-[#0E1310] px-5 py-16">
-        <div className="mx-auto w-full max-w-2xl">
-          <h2 className="mb-8 text-center text-2xl font-extrabold sm:text-3xl">
-            Perguntas frequentes
-          </h2>
-          <FAQ />
         </div>
       </section>
 
       {/* ===================== GARANTIA ===================== */}
-      <section className="px-5 py-16">
-        <div className="mx-auto w-full max-w-xl">
-          <div className="rounded-2xl border-2 border-[#39D98A] bg-[#39D98A]/[0.08] p-7 text-center">
-            <span className="text-4xl">🛡️</span>
-            <h2 className="mt-3 text-xl font-extrabold text-[#39D98A]">
-              Garantia incondicional de 30 dias
-            </h2>
-            <p className="mt-2 text-[#F4F4F6]">
-              Testou e não gostou? Devolvemos cada centavo. Sem perguntas, sem
-              burocracia. O risco é todo nosso.
-            </p>
+      <section className="lp-alt lp-sec lp-center">
+        <div className="lp-wrap">
+          <div className="lp-selo">
+            GARANTIA
+            <br />
+            30 DIAS
           </div>
+          <h2 className="lp-title">O risco é todo meu.</h2>
+          <p className="lp-lead">
+            Use por 30 dias. Se você não souber exatamente quanto ainda pode
+            vender este ano, devolvo cada centavo. Sem pergunta, sem letra miúda.
+          </p>
         </div>
       </section>
 
       {/* ===================== ESCASSEZ + URGÊNCIA ===================== */}
-      <section className="bg-[#0E1310] px-5 py-16">
-        <div className="mx-auto w-full max-w-3xl">
-          <h2 className="text-center text-2xl font-extrabold sm:text-3xl">
-            Por que decidir agora
-          </h2>
-          <p className="mx-auto mt-3 max-w-xl text-center text-[#A0A0B0]">
-            As duas razões são reais.
-          </p>
-          <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2">
-            <div className="rounded-2xl border border-[#FFC53D]/30 bg-[#FFC53D]/[0.06] p-5">
-              <h3 className="font-extrabold text-[#FFC53D]">🔒 Vagas</h3>
-              <p className="mt-2 text-[#F4F4F6]">
-                Os 300 primeiros travam <strong>R$ 27,90 pra sempre</strong>.
-                Quando o preço voltar pra R$ 87,90, você continua no de Fundador.
-                Restam {VAGAS_RESTANTES} de 300.
+      <section className="lp-sec">
+        <div className="lp-wrap">
+          <div className="lp-eyebrow">Por que decidir agora</div>
+          <h2 className="lp-title">As duas razões são reais</h2>
+          <div className="lp-urg">
+            <div className="lp-card">
+              <h3>🔒 Vagas</h3>
+              <p>
+                Os 300 primeiros travam <b>R$ 27,90 pra sempre</b>. Quando o
+                preço voltar pra R$ 87,90, você continua no de fundador.{" "}
+                <b>Restam {VAGAS_RESTANTES} de 300.</b>
               </p>
             </div>
-            <div className="rounded-2xl border border-[#FFC53D]/30 bg-[#FFC53D]/[0.06] p-5">
-              <h3 className="font-extrabold text-[#FFC53D]">⏳ Tempo</h3>
-              <p className="mt-2 text-[#F4F4F6]">
-                Faltam <strong>{diasFimAno} dias</strong> pro fim do ano fiscal — e
-                o estrago do limite é <strong>retroativo a janeiro</strong>.
-                Descobrir em dezembro é tarde demais.
+            <div className="lp-card">
+              <h3>⏳ Tempo</h3>
+              <p>
+                Faltam <b>{diasFimAno}</b> dias pro fim do ano fiscal — e o
+                estrago do limite é <b>retroativo a janeiro</b>. Descobrir em
+                dezembro é descobrir tarde demais.
               </p>
             </div>
           </div>
-          <p className="mt-6 text-center font-extrabold text-[#F4F4F6]">
-            O preço só fica barato pros 300 primeiros, e o risco só cresce a cada
-            mês. Esperar perde nos dois.
+          <p
+            className="lp-lead"
+            style={{ marginTop: 22, fontSize: 19, color: "#fff" }}
+          >
+            <b>
+              O preço só fica barato pros 300 primeiros, e o risco só cresce a
+              cada mês. Esperar perde nos dois.
+            </b>
           </p>
         </div>
       </section>
 
+      {/* ===================== FAQ ===================== */}
+      <section className="lp-dark2 lp-sec">
+        <div className="lp-wrap">
+          <div className="lp-eyebrow lp-center" style={{ textAlign: "center" }}>
+            Ainda na dúvida?
+          </div>
+          <h2 className="lp-title lp-center">Perguntas que todo MEI faz</h2>
+          <div className="lp-faq">
+            {[
+              {
+                q: "“Eu controlo na planilha.”",
+                a: "Ela te responde agora quanto ainda pode vender e te avisa antes? Não. O Semáforo soma sozinho e acende o amarelo — sempre em dia, sem você manter nada.",
+              },
+              {
+                q: "“Meu contador já cuida disso.”",
+                a: "O contador liga em janeiro, tarde demais. O app não substitui o contador, ele alimenta: manda a Pasta do Contador num toque e te avisa no amarelo, não só no vermelho.",
+              },
+              {
+                q: "“Não sou boa de tecnologia.”",
+                a: "Foi feito pra quem não entende de imposto nem de app: 3 toques, sem instalar, com mini-treino de 3 minutos. Se você usa WhatsApp, você usa isso.",
+              },
+              {
+                q: "“Não vou estourar mesmo.”",
+                a: "Quase ninguém acha que vai — até estourar. R$ 81 mil por ano são só R$ 6.750 por mês. O Raio-X do Seu Ano mostra, com o SEU número, onde você fecha dezembro.",
+              },
+              {
+                q: "“É mais uma assinatura.”",
+                a: "R$ 0,93 por dia, 2% de um risco de R$ 15.000. E com a garantia, você testa de graça — não gasta.",
+              },
+              {
+                q: "“Vou pensar.”",
+                a: "Pensa rápido, pelo calendário: o risco é retroativo a janeiro e a vaga de fundador pode não estar lá quando você voltar. Esperar perde nos dois.",
+              },
+            ].map((item) => (
+              <details className="lp-q" key={item.q}>
+                <summary>{item.q}</summary>
+                <div className="lp-a">{item.a}</div>
+              </details>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ===================== CTA FINAL ===================== */}
-      <section className="px-5 py-16 text-center">
-        <div className="mx-auto w-full max-w-xl">
-          <h2 className="text-3xl font-extrabold sm:text-4xl">
-            Seu MEI merece controle.
+      <section className="lp-final lp-sec">
+        <div className="lp-wrap">
+          <h2 className="lp-title">
+            Pare de vender com medo. Comece a vender sabendo.
           </h2>
-          <p className="mt-3 text-lg text-[#A0A0B0]">
-            Entre para o grupo dos 300 Fundadores.
+          <p className="lp-lead" style={{ margin: "0 auto 8px" }}>
+            Seu número em 2 minutos · avisada antes de estourar · R$ 0,93/dia ·
+            garantia de 30 dias.
           </p>
-          <Link href="/cadastro" className="btn-lp mt-8 w-full sm:w-auto">
-            Criar minha conta grátis →
+          <Link href="/cadastro" className="lp-btn lp-btn-lg" style={{ marginTop: 16 }}>
+            Travar meu preço de fundador agora
           </Link>
-          <p className="mt-4 text-sm text-[#A0A0B0]">
+          <p className="lp-micro">Restam {VAGAS_RESTANTES} de 300 vagas.</p>
+          <p className="lp-micro">
             Já tem conta?{" "}
-            <Link href="/login" className="font-semibold text-[#39D98A] hover:underline">
+            <Link href="/login" style={{ color: "#16A34A", fontWeight: 700 }}>
               Entrar →
             </Link>
           </p>
@@ -482,45 +571,27 @@ export default function LandingPage() {
       </section>
 
       {/* ===================== RODAPÉ ===================== */}
-      <footer className="border-t border-white/10 px-5 py-10 text-center">
-        <Image
-          src="/logo/horizontal-dark.svg"
-          alt="MEI no Limite"
-          width={1024}
-          height={463}
-          unoptimized
-          className="mx-auto h-8 w-auto"
-        />
-        <p className="mt-4 text-sm text-[#A0A0B0]">
-          MEI no Limite · by H9 Consultoria
-        </p>
-        <p className="text-sm text-[#A0A0B0]">meinolimite.com.br</p>
-        <p className="mt-2 text-xs text-[#A0A0B0]/70">
-          © 2026 · Todos os direitos reservados
-        </p>
+      <footer className="lp-footer">
+        <div className="lp-wrap">
+          <div className="lp-semaforo" style={{ marginBottom: 10 }}>
+            <span className="lp-s-g" />
+            <span className="lp-s-a" />
+            <span className="lp-s-r" />
+          </div>
+          <div>MEI no Limite — by H9 Consultoria · meinolimite.com.br · © 2026</div>
+          <p style={{ fontSize: 12, color: "#64748B", marginTop: 10 }}>
+            O MEI no Limite é uma ferramenta de controle de faturamento e não
+            substitui a contabilidade oficial.
+          </p>
+        </div>
       </footer>
-    </div>
-  );
-}
 
-function Passo({
-  cor,
-  emoji,
-  titulo,
-  texto,
-}: {
-  cor: string;
-  emoji: string;
-  titulo: string;
-  texto: string;
-}) {
-  return (
-    <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-5 text-center">
-      <div className="text-4xl">{emoji}</div>
-      <h3 className="mt-2 text-lg font-extrabold" style={{ color: cor }}>
-        {titulo}
-      </h3>
-      <p className="mt-1 text-sm text-[#A0A0B0]">{texto}</p>
+      {/* CTA fixo no mobile */}
+      <div className="lp-sticky">
+        <Link href="/cadastro" className="lp-btn">
+          Quero saber meu número — R$ 0,93/dia
+        </Link>
+      </div>
     </div>
   );
 }
