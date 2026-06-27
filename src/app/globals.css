@@ -28,6 +28,11 @@ body {
     @apply inline-flex items-center justify-center rounded-xl border-2 border-primary px-6 py-3.5 text-base font-semibold text-primary transition-colors hover:bg-primary-light;
   }
 
+  /* CTA verde da landing page (tema dark) */
+  .btn-lp {
+    @apply inline-flex min-h-[52px] items-center justify-center rounded-xl bg-[#39D98A] px-8 py-4 text-lg font-bold text-[#0A0E0C] transition hover:brightness-95;
+  }
+
   .card {
     @apply rounded-2xl border border-gray-100 bg-white p-5 shadow-sm;
   }
