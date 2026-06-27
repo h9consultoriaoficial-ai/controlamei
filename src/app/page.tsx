@@ -1,10 +1,14 @@
 import Link from "next/link";
 import Image from "next/image";
+import { buscarVagasRestantes } from "@/app/actions/configuracoes";
 
-// Marketing: número de vagas restantes (ajuste à vontade / tornar dinâmico depois).
-const VAGAS_RESTANTES = 37;
+// ISR: revalida a cada 60s para refletir vagas (banco) e dias do ano fiscal.
+export const revalidate = 60;
 
-export default function LandingPage() {
+export default async function LandingPage() {
+  const { total: vagasTotal, restantes: vagasRestantes } =
+    await buscarVagasRestantes();
+
   const hoje = new Date();
   const diasFimAno = Math.max(
     0,
@@ -32,7 +36,7 @@ export default function LandingPage() {
             <div>
               <span className="lp-pill">
                 <span className="lp-dotpulse" /> Acesso Fundador · restam{" "}
-                {VAGAS_RESTANTES} de 300 vagas
+                {vagasRestantes} de {vagasTotal} vagas
               </span>
               <h1>
                 Você pode já ter{" "}
@@ -480,7 +484,7 @@ export default function LandingPage() {
               <p>
                 Os 300 primeiros travam <b>R$ 27,90 pra sempre</b>. Quando o
                 preço voltar pra R$ 87,90, você continua no de fundador.{" "}
-                <b>Restam {VAGAS_RESTANTES} de 300.</b>
+                <b>Restam {vagasRestantes} de {vagasTotal}.</b>
               </p>
             </div>
             <div className="lp-card">
@@ -560,7 +564,9 @@ export default function LandingPage() {
           <Link href="/cadastro" className="lp-btn lp-btn-lg" style={{ marginTop: 16 }}>
             Travar meu preço de fundador agora
           </Link>
-          <p className="lp-micro">Restam {VAGAS_RESTANTES} de 300 vagas.</p>
+          <p className="lp-micro">
+            Restam {vagasRestantes} de {vagasTotal} vagas.
+          </p>
           <p className="lp-micro">
             Já tem conta?{" "}
             <Link href="/login" style={{ color: "#16A34A", fontWeight: 700 }}>
