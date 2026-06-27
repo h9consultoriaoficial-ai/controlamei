@@ -37,6 +37,7 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "configuração ausente" }, { status: 500 });
   }
   const recebido =
+    req.headers.get("x-cakto-secret") ||
     req.headers.get("x-cakto-signature") ||
     req.headers.get("x-webhook-secret") ||
     req.headers.get("authorization")?.replace(/^Bearer\s+/i, "") ||
