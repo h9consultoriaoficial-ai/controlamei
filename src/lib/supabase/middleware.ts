@@ -45,6 +45,25 @@ export async function updateSession(request: NextRequest) {
     return NextResponse.redirect(url);
   }
 
+  // Gating de PLANO em /app/*: só quem tem plano 'pro' acessa.
+  // (As demais rotas — /login, /cadastro, /assinar, /r/[token], /api/* etc. —
+  //  não começam com /app, então ficam fora desta checagem.)
+  // Se o usuário ainda não tem tenant (cadastro incompleto), deixamos passar:
+  // o getTenantOrRedirect do app cuida desse caso (-> /cadastro).
+  if (user && path.startsWith("/app")) {
+    const { data: tenant } = await supabase
+      .from("tenants")
+      .select("plano")
+      .eq("user_id", user.id)
+      .maybeSingle();
+
+    if (tenant && tenant.plano !== "pro") {
+      const url = request.nextUrl.clone();
+      url.pathname = "/assinar";
+      return NextResponse.redirect(url);
+    }
+  }
+
   // Usuário logado não precisa ver a tela de login.
   // (Não redirecionamos de /cadastro para evitar loop com o fallback
   //  de "cadastro incompleto" em getTenantOrRedirect.)
