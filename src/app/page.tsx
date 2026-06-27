@@ -2,6 +2,11 @@ import Link from "next/link";
 import Image from "next/image";
 import { buscarVagasRestantes } from "@/app/actions/configuracoes";
 
+// Checkout da Cakto (env com a URL real como fallback).
+const CHECKOUT_URL =
+  process.env.NEXT_PUBLIC_CAKTO_CHECKOUT_URL ||
+  "https://pay.cakto.com.br/bap6dvn_945227";
+
 // ISR: revalida a cada 60s para refletir vagas (banco) e dias do ano fiscal.
 export const revalidate = 60;
 
@@ -65,9 +70,14 @@ export default async function LandingPage() {
                   sabe o seu limite (R$ 81.000) e aplica a regra sozinho.
                 </li>
               </ul>
-              <Link href="/cadastro" className="lp-btn lp-btn-lg">
+              <a
+                href={CHECKOUT_URL}
+                className="lp-btn lp-btn-lg"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 Quero saber meu número agora
-              </Link>
+              </a>
               <p className="lp-micro">
                 R$ 0,93 por dia. Menos que um café. Garantia de 30 dias.
               </p>
@@ -450,9 +460,15 @@ export default async function LandingPage() {
               Plano anual de R$ 334,80 à vista no cartão (ou 12x de R$ 27,90).
             </p>
             <p className="dia">= R$ 0,93 por dia. Menos que um café.</p>
-            <Link href="/cadastro" className="lp-btn lp-btn-lg" style={{ marginTop: 12 }}>
+            <a
+              href={CHECKOUT_URL}
+              className="lp-btn lp-btn-lg"
+              style={{ marginTop: 12 }}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               Garantir meu acesso de fundador
-            </Link>
+            </a>
           </div>
         </div>
       </section>
@@ -561,9 +577,15 @@ export default async function LandingPage() {
             Seu número em 2 minutos · avisada antes de estourar · R$ 0,93/dia ·
             garantia de 30 dias.
           </p>
-          <Link href="/cadastro" className="lp-btn lp-btn-lg" style={{ marginTop: 16 }}>
+          <a
+            href={CHECKOUT_URL}
+            className="lp-btn lp-btn-lg"
+            style={{ marginTop: 16 }}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             Travar meu preço de fundador agora
-          </Link>
+          </a>
           <p className="lp-micro">
             Restam {vagasRestantes} de {vagasTotal} vagas.
           </p>
@@ -594,9 +616,14 @@ export default async function LandingPage() {
 
       {/* CTA fixo no mobile */}
       <div className="lp-sticky">
-        <Link href="/cadastro" className="lp-btn">
+        <a
+          href={CHECKOUT_URL}
+          className="lp-btn"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
           Quero saber meu número — R$ 0,93/dia
-        </Link>
+        </a>
       </div>
     </div>
   );

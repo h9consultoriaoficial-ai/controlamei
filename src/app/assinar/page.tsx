@@ -5,7 +5,7 @@ import Image from "next/image";
 // com o link real do produto; o placeholder abaixo é só fallback.
 const CHECKOUT_URL =
   process.env.NEXT_PUBLIC_CAKTO_CHECKOUT_URL ||
-  "https://pay.cakto.com.br/PRODUTO";
+  "https://pay.cakto.com.br/bap6dvn_945227";
 
 export const metadata = {
   title: "Ative seu acesso — MEI no Limite",
