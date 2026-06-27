@@ -6,6 +6,15 @@ import FAQ from "@/components/FAQ";
 const VAGAS_RESTANTES = 37;
 
 export default function LandingPage() {
+  const hoje = new Date();
+  const diasFimAno = Math.max(
+    0,
+    Math.ceil(
+      (new Date(hoje.getFullYear(), 11, 31).getTime() - hoje.getTime()) /
+        86_400_000
+    )
+  );
+
   return (
     <div className="min-h-screen bg-[#0A0E0C] text-[#F4F4F6]">
       {/* ===================== HERO ===================== */}
@@ -245,6 +254,35 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* ===================== EQUAÇÃO DE VALOR ===================== */}
+      <section className="px-5 py-16">
+        <div className="mx-auto w-full max-w-4xl">
+          <h2 className="text-center text-2xl font-extrabold sm:text-3xl">
+            Por que funciona pra você
+          </h2>
+          <p className="mx-auto mt-3 max-w-xl text-center text-[#A0A0B0]">
+            Mesmo se você &quot;não é boa de tecnologia&quot;.
+          </p>
+          <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {[
+              { e: "🎯", t: "Resultado", d: "Dormir tranquila, nunca mais ser pega de surpresa." },
+              { e: "✅", t: "Confiança", d: "À prova de leigo + regra automática + garantia de 30 dias." },
+              { e: "⚡", t: "Rapidez", d: "Sua primeira cor em 2 minutos." },
+              { e: "🪶", t: "Esforço", d: "3 toques. Sem instalar. Sem imposto pra entender." },
+            ].map((c) => (
+              <div
+                key={c.t}
+                className="rounded-2xl border border-white/10 bg-white/[0.04] p-5 text-center"
+              >
+                <div className="text-3xl">{c.e}</div>
+                <h3 className="mt-2 font-extrabold text-[#F4F4F6]">{c.t}</h3>
+                <p className="mt-1 text-sm text-[#A0A0B0]">{c.d}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ===================== O QUE ESTÁ INCLUSO ===================== */}
       <section className="bg-[#0E1310] px-5 py-16">
         <div className="mx-auto w-full max-w-xl">
@@ -274,6 +312,46 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* ===================== BÔNUS ===================== */}
+      <section className="bg-[#0E1310] px-5 py-16">
+        <div className="mx-auto w-full max-w-2xl">
+          <h2 className="text-center text-2xl font-extrabold sm:text-3xl">
+            E ainda leva 7 bônus
+          </h2>
+          <p className="mx-auto mt-3 max-w-xl text-center text-[#A0A0B0]">
+            Tudo dentro dos R$ 27,90/mês.
+          </p>
+          <ul className="mt-8 flex flex-col gap-3">
+            {[
+              { n: "Raio-X do Seu Ano — projeção de onde você fecha dezembro", v: "R$ 297" },
+              { n: "Pasta do Contador Pronta — relatório num toque", v: "R$ 397" },
+              { n: "Lembrete que não deixa esquecer — alerta diário no WhatsApp", v: "R$ 247" },
+              { n: "Destravada em 3 Minutos — mini-treino sem imposto", v: "R$ 197" },
+              { n: "Guia dos 3 Meses que mais derrubam MEI", v: "R$ 197" },
+              { n: "Veja Antes de Confiar — demo + seu número antes de pagar", v: "R$ 297" },
+              { n: "Acesso Fundador Vitalício — preço travado pra sempre", v: "R$ 215" },
+            ].map((b) => (
+              <li
+                key={b.n}
+                className="flex items-center justify-between gap-3 rounded-2xl border border-white/10 bg-white/[0.04] p-4"
+              >
+                <span className="flex items-start gap-3">
+                  <span className="mt-0.5 shrink-0 text-lg">🎁</span>
+                  <span className="text-[#F4F4F6]">{b.n}</span>
+                </span>
+                <span className="shrink-0 text-sm font-bold text-[#A0A0B0] line-through">
+                  {b.v}
+                </span>
+              </li>
+            ))}
+          </ul>
+          <p className="mt-6 text-center text-lg font-extrabold text-[#F4F4F6]">
+            Valor total dos bônus:{" "}
+            <span className="text-[#39D98A]">R$ 1.847</span>
+          </p>
+        </div>
+      </section>
+
       {/* ===================== ANCORAGEM DE PREÇO ===================== */}
       <section className="px-5 py-16">
         <div className="mx-auto w-full max-w-xl text-center">
@@ -290,6 +368,11 @@ export default function LandingPage() {
           </div>
 
           <div className="mt-4 flex items-center justify-center gap-3 text-[#A0A0B0]">
+            <span>Só em bônus:</span>
+            <span className="text-xl font-bold line-through">R$ 1.847</span>
+          </div>
+
+          <div className="mt-2 flex items-center justify-center gap-3 text-[#A0A0B0]">
             <span>Preço cheio:</span>
             <span className="text-xl font-bold line-through">R$ 87,90/mês</span>
           </div>
@@ -340,6 +423,40 @@ export default function LandingPage() {
               burocracia. O risco é todo nosso.
             </p>
           </div>
+        </div>
+      </section>
+
+      {/* ===================== ESCASSEZ + URGÊNCIA ===================== */}
+      <section className="bg-[#0E1310] px-5 py-16">
+        <div className="mx-auto w-full max-w-3xl">
+          <h2 className="text-center text-2xl font-extrabold sm:text-3xl">
+            Por que decidir agora
+          </h2>
+          <p className="mx-auto mt-3 max-w-xl text-center text-[#A0A0B0]">
+            As duas razões são reais.
+          </p>
+          <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <div className="rounded-2xl border border-[#FFC53D]/30 bg-[#FFC53D]/[0.06] p-5">
+              <h3 className="font-extrabold text-[#FFC53D]">🔒 Vagas</h3>
+              <p className="mt-2 text-[#F4F4F6]">
+                Os 300 primeiros travam <strong>R$ 27,90 pra sempre</strong>.
+                Quando o preço voltar pra R$ 87,90, você continua no de Fundador.
+                Restam {VAGAS_RESTANTES} de 300.
+              </p>
+            </div>
+            <div className="rounded-2xl border border-[#FFC53D]/30 bg-[#FFC53D]/[0.06] p-5">
+              <h3 className="font-extrabold text-[#FFC53D]">⏳ Tempo</h3>
+              <p className="mt-2 text-[#F4F4F6]">
+                Faltam <strong>{diasFimAno} dias</strong> pro fim do ano fiscal — e
+                o estrago do limite é <strong>retroativo a janeiro</strong>.
+                Descobrir em dezembro é tarde demais.
+              </p>
+            </div>
+          </div>
+          <p className="mt-6 text-center font-extrabold text-[#F4F4F6]">
+            O preço só fica barato pros 300 primeiros, e o risco só cresce a cada
+            mês. Esperar perde nos dois.
+          </p>
         </div>
       </section>
 
