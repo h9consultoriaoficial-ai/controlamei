@@ -25,7 +25,8 @@ export default function LandingPage() {
         </span>
 
         <h1 className="mt-6 text-3xl font-extrabold leading-tight tracking-tight sm:text-4xl">
-          Você pode já ter estourado o limite do MEI e nem saber.
+          Você pode já ter{" "}
+          <span className="hl-red">estourado o limite do MEI</span> e nem saber.
         </h1>
 
         <p className="mt-5 max-w-xl text-lg text-[#A0A0B0]">
@@ -105,6 +106,141 @@ export default function LandingPage() {
               titulo="Vermelho"
               texto="Pare e fale com seu contador."
             />
+          </div>
+        </div>
+      </section>
+
+      {/* ===================== VEJA O APP POR DENTRO ===================== */}
+      <section className="px-5 py-16">
+        <div className="mx-auto w-full max-w-4xl">
+          <p className="text-center text-sm font-semibold uppercase tracking-widest text-[#FFC53D]">
+            Veja o app por dentro
+          </p>
+          <h2 className="mt-2 text-center text-2xl font-extrabold sm:text-3xl">
+            É isso que você abre no celular
+          </h2>
+          <p className="mx-auto mt-3 max-w-xl text-center text-[#A0A0B0]">
+            Sem telas complicadas. Você olha a cor, vê quanto ainda pode vender e
+            manda pro contador.
+          </p>
+
+          <div className="mt-10 flex flex-wrap items-start justify-center gap-7">
+            {/* Tela 1 — Semáforo */}
+            <div className="flex flex-col items-center">
+              <div className="w-[230px] rounded-[34px] border-8 border-white/10 bg-[#0A0E0C] p-3 shadow-2xl">
+                <div className="min-h-[400px] rounded-[22px] bg-[#F1F5F9] p-3.5 text-[#0B1120]">
+                  <p className="pb-3 text-[13px] font-extrabold">MEI no Limite</p>
+                  <div className="flex items-center gap-3 rounded-2xl bg-[#FEF3C7] p-3">
+                    <div className="flex flex-col gap-1.5 rounded-xl bg-gray-900 p-1.5">
+                      <span className="h-4 w-4 rounded-full bg-[#FF5C5C] opacity-20" />
+                      <span className="h-4 w-4 rounded-full bg-[#FFC53D] shadow-[0_0_10px_#FFC53D]" />
+                      <span className="h-4 w-4 rounded-full bg-[#39D98A] opacity-20" />
+                    </div>
+                    <div>
+                      <p className="text-[11px] font-extrabold uppercase text-[#B45309]">
+                        Atenção!
+                      </p>
+                      <p className="text-[30px] font-extrabold leading-none">78%</p>
+                      <p className="text-[11px] text-[#64748B]">
+                        do limite anual usado
+                      </p>
+                    </div>
+                  </div>
+                  <div className="mt-3 rounded-xl border border-[#A7F3D0] bg-[#ECFDF5] p-3 text-center text-[12px] text-[#065F46]">
+                    Você ainda pode vender
+                    <span className="mt-1 block text-[22px] font-extrabold text-[#16A34A]">
+                      R$ 17.820
+                    </span>
+                  </div>
+                  <div className="mt-3 flex justify-between border-b border-dashed border-gray-200 py-2 text-[12px]">
+                    <span className="text-[#94A3B8]">Limite anual</span>
+                    <span>R$ 81.000</span>
+                  </div>
+                  <div className="flex justify-between py-2 text-[12px]">
+                    <span className="text-[#94A3B8]">Já faturado</span>
+                    <span>R$ 63.180</span>
+                  </div>
+                </div>
+              </div>
+              <p className="mt-3 text-sm font-semibold text-[#A0A0B0]">
+                🚦 Seu semáforo
+              </p>
+            </div>
+
+            {/* Tela 2 — Lançar */}
+            <div className="flex flex-col items-center">
+              <div className="w-[230px] rounded-[34px] border-8 border-white/10 bg-[#0A0E0C] p-3 shadow-2xl">
+                <div className="min-h-[400px] rounded-[22px] bg-[#F1F5F9] p-3.5 text-[#0B1120]">
+                  <p className="pb-3 text-[13px] font-extrabold">Nova venda</p>
+                  <p className="mb-2 text-[13px] font-extrabold">Lançar receita</p>
+                  <div className="mb-2 flex justify-between rounded-lg border border-gray-200 bg-white px-3 py-2 text-[12px]">
+                    <span className="text-[#94A3B8]">Valor</span>
+                    <span className="font-bold">R$ 250,00</span>
+                  </div>
+                  <div className="mb-3 flex justify-between rounded-lg border border-gray-200 bg-white px-3 py-2 text-[12px]">
+                    <span className="text-[#94A3B8]">Data</span>
+                    <span>27/06/2026</span>
+                  </div>
+                  <p className="mb-1.5 text-[11px] text-[#94A3B8]">
+                    Forma de pagamento
+                  </p>
+                  <div className="mb-3 flex flex-wrap gap-1.5">
+                    <span className="rounded-full bg-[#16A34A] px-2.5 py-1 text-[11px] font-semibold text-white">
+                      PIX
+                    </span>
+                    <span className="rounded-full border border-gray-200 px-2.5 py-1 text-[11px] text-[#475569]">
+                      Dinheiro
+                    </span>
+                    <span className="rounded-full border border-gray-200 px-2.5 py-1 text-[11px] text-[#475569]">
+                      Cartão
+                    </span>
+                  </div>
+                  <div className="rounded-lg bg-[#16A34A] py-2.5 text-center text-[13px] font-extrabold text-white">
+                    Salvar lançamento
+                  </div>
+                </div>
+              </div>
+              <p className="mt-3 text-sm font-semibold text-[#A0A0B0]">
+                ✍️ Lançar em 3 toques
+              </p>
+            </div>
+
+            {/* Tela 3 — Relatório */}
+            <div className="flex flex-col items-center">
+              <div className="w-[230px] rounded-[34px] border-8 border-white/10 bg-[#0A0E0C] p-3 shadow-2xl">
+                <div className="min-h-[400px] rounded-[22px] bg-[#F1F5F9] p-3.5 text-[#0B1120]">
+                  <p className="pb-3 text-[13px] font-extrabold">Relatório</p>
+                  <p className="mb-2 text-[13px] font-extrabold">
+                    Resumo do ano · 2026
+                  </p>
+                  <div className="flex justify-between border-b border-dashed border-gray-200 py-2 text-[12px]">
+                    <span>Receitas</span>
+                    <span className="font-bold text-[#16A34A]">R$ 63.180</span>
+                  </div>
+                  <div className="flex justify-between border-b border-dashed border-gray-200 py-2 text-[12px]">
+                    <span>Despesas</span>
+                    <span className="font-bold text-[#DC2626]">R$ 11.430</span>
+                  </div>
+                  <div className="flex justify-between border-b border-dashed border-gray-200 py-2 text-[12px]">
+                    <span>Saldo líquido</span>
+                    <span className="font-bold">R$ 51.750</span>
+                  </div>
+                  <div className="flex justify-between py-2 text-[12px]">
+                    <span>% do limite</span>
+                    <span className="font-bold">78%</span>
+                  </div>
+                  <div className="mt-3 rounded-lg bg-[#25D366] py-2.5 text-center text-[13px] font-extrabold text-white">
+                    Enviar pro contador
+                  </div>
+                  <p className="mt-2 text-center text-[11px] text-[#64748B]">
+                    Link abre sem login
+                  </p>
+                </div>
+              </div>
+              <p className="mt-3 text-sm font-semibold text-[#A0A0B0]">
+                📄 Relatório num toque
+              </p>
+            </div>
           </div>
         </div>
       </section>

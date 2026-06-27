@@ -33,6 +33,14 @@ body {
     @apply inline-flex min-h-[52px] items-center justify-center rounded-xl bg-[#39D98A] px-8 py-4 text-lg font-bold text-[#0A0E0C] transition hover:brightness-95;
   }
 
+  /* Destaque vermelho chamativo (headline da landing) */
+  .hl-red {
+    @apply font-extrabold text-[#FF5C5C];
+    border-bottom: 4px solid rgba(255, 92, 92, 0.85);
+    padding-bottom: 2px;
+    animation: hl-redglow 2s ease-in-out infinite;
+  }
+
   .card {
     @apply rounded-2xl border border-gray-100 bg-white p-5 shadow-sm;
   }
@@ -43,5 +51,16 @@ body {
 
   .label-field {
     @apply mb-1.5 block text-sm font-medium text-gray-700;
+  }
+}
+
+/* Animação do destaque vermelho do título (brilho pulsante) */
+@keyframes hl-redglow {
+  0%,
+  100% {
+    text-shadow: 0 0 16px rgba(255, 92, 92, 0.35);
+  }
+  50% {
+    text-shadow: 0 0 34px rgba(255, 92, 92, 0.8);
   }
 }
