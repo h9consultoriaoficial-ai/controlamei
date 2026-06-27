@@ -37,6 +37,13 @@ export default async function LandingPage() {
             unoptimized
             className="h-9 w-auto"
           />
+          <Image
+            src="/og-image.png"
+            alt="MEI no Limite — Controle seu faturamento"
+            width={600}
+            height={300}
+            className="mx-auto mt-6 rounded-xl"
+          />
           <div className="lp-hero-grid" style={{ marginTop: 26 }}>
             <div>
               <span className="lp-pill">
