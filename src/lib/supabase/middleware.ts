@@ -38,6 +38,15 @@ export async function updateSession(request: NextRequest) {
 
   const path = request.nextUrl.pathname;
 
+  // /cadastro foi descontinuado como rota pública: redireciona tudo para
+  // /assinar. O webhook da Cakto cria contas via API + service role (não usa
+  // esta rota), então não há impacto no provisionamento automático.
+  if (path === "/cadastro") {
+    const url = request.nextUrl.clone();
+    url.pathname = "/assinar";
+    return NextResponse.redirect(url);
+  }
+
   // Rotas protegidas: /app/*
   if (!user && path.startsWith("/app")) {
     const url = request.nextUrl.clone();

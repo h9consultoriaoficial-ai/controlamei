@@ -102,13 +102,15 @@ function LoginInner() {
       </div>
 
       <p className="mt-6 text-center text-sm text-gray-600">
-        Ainda não tem conta?{" "}
-        <Link
-          href="/cadastro"
+        Ainda não assinou?{" "}
+        <a
+          href="https://pay.cakto.com.br/bap6dvn_945227"
+          target="_blank"
+          rel="noopener noreferrer"
           className="font-semibold text-primary hover:underline"
         >
-          Criar conta grátis
-        </Link>
+          Assinar agora →
+        </a>
       </p>
     </main>
   );
